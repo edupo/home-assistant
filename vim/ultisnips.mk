@@ -10,9 +10,17 @@ SECTIONS += ULTISNIPS_SECTION
 SNIPS_PARENT_FOLDER=$(shell pwd)
 
 define ULTISNIPS_SECTION
-" Ultisnips
-set rtp+=${SNIPS_PARENT_FOLDER}
+"--- ULTISNIPS ---"
+
+" Ultisnips needs rtp directed to the paret of the snippets folder.
+set rtp+=$(SNIPS_PARENT_FOLDER)
+" Snippets directory
+let g:UltiSnipsSnippetsDir="$(SNIPS_PARENT_FOLDER)/UltiSnips"
+
 let g:UltiSnipsExpandTrigger="<c-space>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" :UltiSnipsEdit command splits current window
+let g:UltiSnipsEditSplit="vertical"
 endef
