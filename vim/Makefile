@@ -2,23 +2,25 @@
 
 include ../utils/utils.mk
 
+# File naming
 RC_FILE = .vimrc
 OUT_FILE = $(HOME)/$(RC_FILE)
 IN_FILE = vimrc.in
 
 # Components are the files which will generate the final rc file.
+# Note Vundle is always added the last.
 COMPONENTS = ultisnips.mk python.mk ycm.mk
-# Do not reorder!
-# Vundle should be always the last plugin.
 COMPONENTS += vundle.mk
 
+# Include the component files.
 include $(COMPONENTS)
 
-export BODY = $(foreach section,$(SECTIONS),$($(section))$(NL)$(NL))
+# Creation of the body section.
+export BODY = $(foreach section,$(SECTIONS),"--- $(section) ---"$(NL)$(NL)$($(section))$(NL)$(NL))
 
-VAR_LIST += BODY
-
+# Rules
 all: $(OUT_FILE)
 
+VAR_LIST += BODY
 $(OUT_FILE): $(IN_FILE) Makefile $(COMPONENTS) 
 	$(envsubst)

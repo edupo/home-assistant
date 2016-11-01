@@ -10,8 +10,6 @@ SECTIONS += ULTISNIPS_SECTION
 SNIPS_PARENT_FOLDER=$(shell pwd)
 
 define ULTISNIPS_SECTION
-"--- ULTISNIPS ---"
-
 " Ultisnips needs rtp directed to the paret of the snippets folder.
 set rtp+=$(SNIPS_PARENT_FOLDER)
 " Snippets directory
