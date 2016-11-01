@@ -1,17 +1,31 @@
 " Putting some color to a grey live.
 syntax on
+
 " Learning to count. What do you think?
 set number
+
 " Encoding, that great mistery.
 set encoding=utf-8
+
 " Better safe than sorry.
 set nocompatible
+
 " Well OS has a pretty clipboard, you know.
 set clipboard=unnamed
+
 " I want backspace to behave like a 'normal' backspace.
 set backspace=indent,eol,start
+
 " Just during load.
 filetype off
+
+" Highlight groups
+highlight BadWhitespace ctermbg=red guibg=red
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+
+" Matching over legth
+match OverLength /\%81v.\+/
+set colorcolumn=81
 
 ${BODY}
 
@@ -26,9 +40,6 @@ nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
-
-" Create group
-highlight BadWhitespace ctermbg=red guibg=red
 
 " C
 au BufRead,BufNewFile *.c,*.h
