@@ -1,9 +1,10 @@
 . ~/.scripts/file_search.sh
 . ~/.scripts/git.sh
 
-# git alias #
-#############
+# Super-lazy aliases #
+######################
 
+# git
 alias s="git status"
 alias c="git commit -m"
 alias ca="git commit -a -m"
@@ -25,12 +26,10 @@ alias stash="git stash"
 alias stas="git stash"
 alias binfo="git branch -vv"
 
-# bash alias #
-##############
+# bash 
 alias reload="source ~/.bashrc"
-# path alias #
-##############
 
+# path
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
@@ -41,19 +40,14 @@ alias cd....="cd ../../.."
 
 alias cd-="cd -"
 
-# grep alias #
-##############
-
+# grep
 alias usages=list_occurrences
 alias count=count_occurrences
 alias replace=replace_text
 
-# apt-get alias #
-#################
-
-alias sgi="sudo apt-get install"
+# apt-get
+alias install="sudo apt-get install"
  
-# stylish alias #
-#################
+# stylish
 alias style="astyle --style=allman --indent=force-tab --indent-cases --break-blocks --pad-oper --pad-header -k1 -W1 -j -O"
 alias pre="style *.cpp *.h"
