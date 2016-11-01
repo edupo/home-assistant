@@ -8,5 +8,5 @@ endef
 
 # Small canned recipes as utils
 define envsubst =
-envsubst '$(addsuffix },$(addprefix $${,$(VAR_LIST)))' <$< >$@
+@envsubst '$(addsuffix },$(addprefix $${,$(VAR_LIST)))' <$< >$@
 endef
