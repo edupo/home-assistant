@@ -1,7 +1,7 @@
 
 export HOME?=$(shell echo $HOME)
 
-ALL = vim git
+ALL = bash vim git
 
 all: $(ALL)
 	@echo "All done."
