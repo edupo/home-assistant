@@ -1,5 +1,5 @@
 # vim meta-files
-.sw*
+*.sw[a-z]
 *~
 
 # Hidden files
