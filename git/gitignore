@@ -1,0 +1,6 @@
+# vim meta-files
+.sw*
+*~
+
+# Hidden files
+.*
