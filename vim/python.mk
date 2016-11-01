@@ -1,4 +1,5 @@
 
+PLUGINS += tmhedberg/SimpylFold vim-scripts/indentpython.vim
 SECTIONS += PYTHON_SECTION
 
 define PYTHON_SECTION
