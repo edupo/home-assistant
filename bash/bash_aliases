@@ -1,5 +1,5 @@
-. ~/.scripts/file_search.sh
-. ~/.scripts/git.sh
+. ${FILESEARCH_SCRIPT_FILE} 
+. ${GIT_SCRIPT_FILE}
 
 # Super-lazy aliases #
 ######################
