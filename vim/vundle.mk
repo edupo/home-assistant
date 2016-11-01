@@ -17,9 +17,6 @@ call vundle#begin()
 $(foreach plugin,$(PLUGINS),Plugin '$(plugin)'$(NL))
 
 " To be tested
-Plugin 'tmhedberg/SimpylFold'
-Plugin 'vim-scripts/indentpython.vim'
-Plugin 'nvie/vim-flake8'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'kien/ctrlp.vim'
 Plugin 'tpope/vim-fugitive'
