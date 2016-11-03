@@ -21,7 +21,8 @@ COMPONENTS += vundle.mk
 include $(COMPONENTS)
 
 # vimrc body generation
-export BODY = $(foreach section,$(SECTIONS),"--- $(section) ---"$(NL)$(NL)$($(section))$(NL)$(NL))
+export BODY = $(foreach section,$(SECTIONS)\
+	,"--- $(section) ---"$(NL)$(NL)$($(section))$(NL)$(NL))
 VAR_LIST += BODY
 
 ### General rules ###
@@ -29,7 +30,7 @@ VAR_LIST += BODY
 .PHONY: config install 
 config: $(OUT_FILE)
 
-install: %.install
+install: $(INSTALL_TARGETS)
 	@echo "vim (hopefully) installed."
 
 ### Specific rules ###
@@ -37,6 +38,7 @@ install: %.install
 $(OUT_FILE): $(IN_FILE) Makefile $(COMPONENTS) 
 	$(envsubst)
 
+INSTALL_TARGETS += vim.install
 vim.install:
 	@if [ -z `which vim` ]; then \
 	  if [ ! -z `which apt-get` ]; then \

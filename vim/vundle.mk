@@ -27,6 +27,10 @@ Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 call vundle#end()
 endef
 
+INSTALL_TARGETS := vundle.install $(INSTALL_TARGETS)
 vundle.install:
+	@echo installing 'vundle'
 	mkdir -p $(VIM_BUNDLE_PATH)
-	git clone https://github.com/VundleVim/Vundle.vim.git $(VIM_BUNDLE_PATH)/Vundle.vim
+	git clone https://github.com/VundleVim/Vundle.vim.git \
+		$(VIM_BUNDLE_PATH)/Vundle.vim
+	vim +PluginInstall +qall
