@@ -31,6 +31,6 @@ setup:
 	  if [ ! -z `which apt-get` ]; then \
 	    sudo apt-get install vim; \
 	  fi \
-	else \
+	else 
 	  echo "vim already installed";\
 	fi
