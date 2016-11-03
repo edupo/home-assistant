@@ -24,3 +24,13 @@ all: $(OUT_FILE)
 VAR_LIST += BODY
 $(OUT_FILE): $(IN_FILE) Makefile $(COMPONENTS) 
 	$(envsubst)
+
+.PHONY: setup
+setup:
+	@if [ -z `which vim` ]; then \
+	  if [ ! -z `which apt-get` ]; then \
+	    sudo apt-get install vim; \
+	  fi \
+	else \
+	  echo "vim already installed";\
+	fi
