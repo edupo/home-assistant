@@ -1,11 +1,13 @@
 #!/usr/bin/make
 
 include ../utils/utils.mk
+include $(UTILS_PATH)/format.mk
 
 # To avoid 'cheating' vundle uses the same mechanism than for other plugins.
 # But you want Vundle to be loaded first. Believe me.
 PLUGINS := gmarik/Vundle.vim ${PLUGINS}
 SECTIONS := VUNDLE_SECTION ${SECTIONS}
+_VUNDLE_PATH := $(VIM_BUNDLE_PATH)/Vundle.vim
 
 define VUNDLE_SECTION
 " Vundle is a plugin manager for vim.
@@ -29,8 +31,13 @@ endef
 
 INSTALL_TARGETS := vundle.install $(INSTALL_TARGETS)
 vundle.install:
-	@echo installing 'vundle'
+	@$(ECHO) $(call msg_g,INSTAL,Installing vundle for vim)
 	mkdir -p $(VIM_BUNDLE_PATH)
-	git clone https://github.com/VundleVim/Vundle.vim.git \
-		$(VIM_BUNDLE_PATH)/Vundle.vim
-	vim +PluginInstall +qall
+	if [ -d "$(_VUNDLE_PATH)" ]; then \
+	  git clone https://github.com/VundleVim/Vundle.vim.git \
+		$(VIM_BUNDLE_PATH)/Vundle.vim; \
+	else \
+	  cd $(_VUNDLE_PATH); \
+	  git pull; \
+	fi
+	vim +PluginInstall +qall;
