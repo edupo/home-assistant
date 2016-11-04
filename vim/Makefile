@@ -32,7 +32,6 @@ VAR_LIST += BODY
 config: $(OUT_FILE)
 
 install: vim.install $(INSTALL_TARGETS)
-	@$(ECHO) $(call msg_g,INSTAL, installed 'vim')	
 
 ### Specific rules ###
 

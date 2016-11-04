@@ -26,5 +26,9 @@ config:
 	$(call git.config,user.email,user email)
 	$(call git.config,user.company,company name)
 
-### Specific rules ###
 install: git.install
+
+clean:
+	rm $(HOME)/.gitconfig
+
+uninstall: git.uninstall
