@@ -13,8 +13,8 @@ define NL
 endef
 
 # Small canned recipes as utils
-define envsubst
-@echo "Generating '$@' from '$<'"
+define recipe.envsubst
+@$(ECHO) $(call msg_g,CONFIG,'$<' -> '$@')
 @envsubst '$(addsuffix },$(addprefix $${,$(VAR_LIST)))' <$< >$@
 endef
 
@@ -34,10 +34,11 @@ endif
 
 %.install:
 	@if [ ! -e "$(call pathsearch,$(basename $@))" ]; then \
+	  $(MSG) $(call msg_g,INSTAL,Installing '$(basename $@)'); \
 	  $(call sys.install,$(basename $@)); \
 	fi
 
 %.check:
 	@if [ ! -e "$(call pathsearch,$(basename $@))" ]; then \
-	  echo "'$(basename $@)' is not installed."; \
+	  $(MSG) $(call msg_r,INSTAL,'$(basename $@)' is not installed); \
 	fi

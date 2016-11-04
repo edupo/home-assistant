@@ -8,8 +8,10 @@
 
 HOST_OS ?= $(shell uname -s | sed 's/MINGW32_//;s/CYGWIN_//')
 
+# Commands
+ECHO := echo
+
 # Macros
-info :=  echo 
 time := `date +"%H:%M:%S"`
 TAB_STDOUT := | sed 's/^/\t/'
 MUTE_STDOUT := 1> /dev/null
@@ -35,8 +37,6 @@ ifneq "$(HOST_OS)" "NT-6.1"
     endif
   endif
 endif
-
-MSG=echo -e
 
 # Message formatting
 msg_g = "[$(gr)$(1)$(no)] $(time) : $(2)"
