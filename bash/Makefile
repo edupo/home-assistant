@@ -6,7 +6,7 @@ include ../utils/utils.mk
 
 ALIAS_FILE = $(HOME)/.bash_aliases
 export GIT_SCRIPT_FILE=$(abspath git.sh)
-export FILESEARCH_SCRIPT_FILE=$(abspath filesearch.sh)
+export FILESEARCH_SCRIPT_FILE=$(abspath file_search.sh)
 
 VAR_LIST = GIT_SCRIPT_FILE FILESEARCH_SCRIPT_FILE
 
