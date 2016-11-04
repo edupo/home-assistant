@@ -7,9 +7,15 @@
 include ../utils/utils.mk
 
 ### Variables ###
+OUT_FILE=$(HOME)/.tmux.conf
+IN_FILE=tmux.conf
 
 ### Rules ###
 .PHONY: config install
-config: tmux.check
+config: tmux.check xclip.check $(OUT_FILE)
 
-install: tmux.install
+install: tmux.install xclip.install
+
+### Specific rules ###
+$(OUT_FILE): $(IN_FILE) Makefile
+	$(recipe.envsubst)
