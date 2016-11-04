@@ -1,6 +1,7 @@
 #!/usr/bin/make
 
 include ../utils/utils.mk
+include $(UTILS_PATH)/format.mk
 
 ### Variables ###
 
@@ -31,10 +32,10 @@ VAR_LIST += BODY
 config: $(OUT_FILE)
 
 install: vim.install $(INSTALL_TARGETS)
-	@echo "vim (hopefully) installed."
+	@$(ECHO) $(call msg_g,INSTAL, installed 'vim')	
 
 ### Specific rules ###
 
 $(OUT_FILE): $(IN_FILE) Makefile $(COMPONENTS) 
-	$(envsubst)
+	$(recipe.envsubst)
 
