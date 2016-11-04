@@ -1,7 +1,30 @@
+#!/usr/bin/make
+#
+# Git home assistance makefile
+#
+# Created on: 04.11.16
 
-all: config
+include ../utils/utils.mk
 
+### Variables ###
 GCFG = git config --global
 
+define git.config
+@if [ ! "`$(GCFG) $(1)`" ]; then \
+  read -p "Enter $(2): " _T; \
+  $(GCFG) $(1) "$$_T"; \
+fi
+endef
+
+### Rules ###
+
 config:
-	@$(GCFG) core.excludesfile '$(abspath gitignore)'
+	@$(ECHO) $(call msg_g,CONFIG,Configuring 'git')
+	$(GCFG) core.excludesfile '$(realpath gitignore)'
+	$(GCFG) push.default simple
+	$(call git.config,user.name,complete user name)
+	$(call git.config,user.email,user email)
+	$(call git.config,user.company,company name)
+
+### Specific rules ###
+install: git.install
