@@ -1,5 +1,11 @@
 #!/usr/bin/make
 
+# Some usefull paths independent from the caller.
+export UTILS_PATH = $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
+export ROOT_PATH = $(realpath $(dir $(UTILS_PATH)))
+
+include $(UTILS_PATH)/format.mk 
+
 # Definition of New Line character for code generation.
 define NL
 
@@ -11,3 +17,27 @@ define envsubst
 @echo "Generating '$@' from '$<'"
 @envsubst '$(addsuffix },$(addprefix $${,$(VAR_LIST)))' <$< >$@
 endef
+
+# Got it from the gmake manual itself ;)
+pathsearch = $(firstword $(wildcard $(addsuffix /$(1), $(subst :, ,$(PATH)))))
+
+# Automatic installation stuff 
+# TODO: It could be a difference in package naming between different os pkg
+# managers. Rigth now only 'apt-get' is supported with 'Debian' packages.
+# Deal with it.
+ifneq ($(call pathsearch,apt-get),)
+  _SYS_PM = sudo apt-get install
+  sys.install = $(_SYS_PM) $(if $(UNATTENDED),-y) $(1)
+else
+  $(error Your package management is not compatible with these makefiles.) 
+endif
+
+%.install:
+	@if [ ! -e "$(call pathsearch,$(basename $@))" ]; then \
+	  $(call sys.install,$(basename $@)); \
+	fi
+
+%.check:
+	@if [ ! -e "$(call pathsearch,$(basename $@))" ]; then \
+	  echo "'$(basename $@)' is not installed."; \
+	fi
