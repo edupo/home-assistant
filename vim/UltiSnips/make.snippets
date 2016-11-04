@@ -1,5 +1,27 @@
 priority -50
 
-snippet #! "Shebang header for makefiles" b
+global !p
+def company():
+    c = os.environ['USER_NAME']
+    return "Company: " + c if c else ""
+endglobal
+
+snippet #! "Shebang" b
 #!/usr/bin/make
+endsnippet
+
+snippet ### "Enclose with tile" b
+### ${1:Text} ###
+endsnippet
+
+snippet head "File header" b
+#!/usr/bin/make
+#
+# ${1:Summary}
+#
+# Created on: `date +%d.%m.%y`
+endsnippet
+
+snippet $
+$(${1})
 endsnippet
