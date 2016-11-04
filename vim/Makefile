@@ -30,7 +30,7 @@ VAR_LIST += BODY
 .PHONY: config install 
 config: $(OUT_FILE)
 
-install: $(INSTALL_TARGETS)
+install: vim.install $(INSTALL_TARGETS)
 	@echo "vim (hopefully) installed."
 
 ### Specific rules ###
@@ -38,12 +38,3 @@ install: $(INSTALL_TARGETS)
 $(OUT_FILE): $(IN_FILE) Makefile $(COMPONENTS) 
 	$(envsubst)
 
-INSTALL_TARGETS += vim.install
-vim.install:
-	@if [ -z `which vim` ]; then \
-	  if [ ! -z `which apt-get` ]; then \
-	    sudo apt-get install vim; \
-	  fi \
-	else 
-	  echo "vim already installed";\
-	fi
