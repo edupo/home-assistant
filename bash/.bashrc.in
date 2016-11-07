@@ -54,7 +54,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    source ${_PROMPT_CONFIG_SCRIPT}
+    source ${PROMPT_SCRIPT_FILE}
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
