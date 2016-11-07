@@ -36,17 +36,17 @@ endif
 
 %.install:
 	@if [ ! -e "$(call pathsearch,$(basename $@))" ]; then \
-	  $(MSG) $(call msg_g,INSTAL,Installing '$(basename $@)'); \
+	  $(ECHO) $(call msg_g,INSTAL,Installing '$(basename $@)'); \
 	  $(call sys.install,$(basename $@)); \
 	fi
 
 %.uninstall:
 	@if [ -e "$(call pathsearch,$(basename $@))" ]; then \
-	  $(MSG) $(call msg_g,UINST ,Uninstalling '$(basename $@)'); \
+	  $(ECHO) $(call msg_g,UINST ,Uninstalling '$(basename $@)'); \
 	  $(call sys.uninstall,$(basename $@)); \
 	fi
 
 %.check:
 	@if [ ! -e "$(call pathsearch,$(basename $@))" ]; then \
-	  $(MSG) $(call msg_r,INSTAL,'$(basename $@)' is not installed); \
+	  $(ECHO) $(call msg_r,INSTAL,'$(basename $@)' is not installed); \
 	fi
