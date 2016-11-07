@@ -1,5 +1,8 @@
 #!/usr/bin/make
 
+# Second expansion required for some implicit rules. See further.
+.SECONDEXPANSION:
+
 # Some usefull paths independent from the caller.
 export UTILS_PATH = $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 export ROOT_PATH = $(realpath $(dir $(UTILS_PATH)))
@@ -17,6 +20,12 @@ define recipe.envsubst
 @$(ECHO) $(call msg_g,CONFIG,'$<' -> '$@')
 @envsubst '$(addsuffix },$(addprefix $${,$(VAR_LIST)))' <$< >$@
 endef
+
+# Implicit terminal rule for .in files. This rule is only executed if the target
+# file has a .in file inside the Makefile directory.
+# Ex: '~/.basrc' will only be substituted if '.bashrc.in' exist.
+%:: $$(notdir $$@).in Makefile
+	$(recipe.envsubst)
 
 # Got it from the gmake manual itself ;)
 pathsearch = $(firstword $(wildcard $(addsuffix /$(1), $(subst :, ,$(PATH)))))
