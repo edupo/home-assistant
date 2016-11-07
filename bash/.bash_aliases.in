@@ -45,6 +45,11 @@ alias usages=list_occurrences
 alias count=count_occurrences
 alias replace=replace_text
 
+# ls
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
 # apt-get
 alias install="sudo apt-get install"
  
