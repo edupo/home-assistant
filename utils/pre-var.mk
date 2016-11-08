@@ -7,6 +7,10 @@
 export UTILS_PATH = $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 export ROOT_PATH = $(realpath $(dir $(UTILS_PATH)))
 
+PACKAGES   :=
+FILES      :=
+DIRS       :=
+
 include $(UTILS_PATH)/format.mk 
 
 # Definition of New Line character for code generation.
@@ -20,12 +24,6 @@ define recipe.envsubst
 @$(ECHO) $(call msg_g,CONFIG,'$<' -> '$@')
 @envsubst '$(addsuffix },$(addprefix $${,$(VAR_LIST)))' <$< >$@
 endef
-
-# Implicit terminal rule for .in files. This rule is only executed if the target
-# file has a .in file inside the Makefile directory.
-# Ex: '~/.basrc' will only be substituted if '.bashrc.in' exist.
-%:: $$(notdir $$@).in Makefile
-	$(recipe.envsubst)
 
 # Got it from the gmake manual itself ;)
 pathsearch = $(firstword $(wildcard $(addsuffix /$(1), $(subst :, ,$(PATH)))))
@@ -43,19 +41,3 @@ else
   $(error Your package management is not compatible with these makefiles.) 
 endif
 
-%.install:
-	@if [ ! -e "$(call pathsearch,$(basename $@))" ]; then \
-	  $(ECHO) $(call msg_g,INSTAL,Installing '$(basename $@)'); \
-	  $(call sys.install,$(basename $@)); \
-	fi
-
-%.uninstall:
-	@if [ -e "$(call pathsearch,$(basename $@))" ]; then \
-	  $(ECHO) $(call msg_g,UINST ,Uninstalling '$(basename $@)'); \
-	  $(call sys.uninstall,$(basename $@)); \
-	fi
-
-%.check:
-	@if [ ! -e "$(call pathsearch,$(basename $@))" ]; then \
-	  $(ECHO) $(call msg_r,INSTAL,'$(basename $@)' is not installed); \
-	fi
