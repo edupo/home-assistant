@@ -16,16 +16,16 @@ $(info $(_MAIN_GOALS))
 MAKECMDGOALS := $(filter-out $(_VALID_MAIN_GOALS),$(MAKECMDGOALS))
 $(info $(MAKECMDGOALS))
 
-_MODULES = git bash vim  tmux
+_MODULES = git bash vim tmux django
 
 ### General rules ###
 .PHONY: all $(_MODULES)
 $(_MODULES):
-	@$(ECHO) $(call msg_g, MAKE ,Doing '$(_MAIN_GOALS)' for '$@')
+	@$(ECHO) $(call msg_g,ASSIST,Doing '$(_MAIN_GOALS)' for '$@')
 	@$(MAKE) --no-print-directory --directory=$@ $(_MAIN_GOALS)
 
 all: $(_MODULES)
-	@echo "All done."
+	@$(ECHO) $(call msg_g,ASSIST,All done.)
 
 .PHONY: $(_VALID_MAIN_GOALS)
 $(_VALID_MAIN_GOALS): ;

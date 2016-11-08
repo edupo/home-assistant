@@ -35,9 +35,14 @@ vundle.install: | $(_VIM_BUNDLE_DIR)
 	@$(ECHO) $(call msg_g,INSTAL,Installing vundle for vim)
 	@if [ ! -d "$(_VUNDLE_DIR)" ]; then \
 	  git clone https://github.com/VundleVim/Vundle.vim.git \
-		$(_VIM_BUNDLE_DIR)/Vundle.vim; \
+		$(_VUNDLE_DIR); \
 	else \
 	  cd $(_VUNDLE_DIR); \
 	  git pull; \
 	fi
 	vim +PluginInstall +qall;
+
+vundle.uninstall:
+	rm -fr $(_VUNDLE_DIR) 
+
+vundle.check: ;
