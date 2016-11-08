@@ -1,28 +1,29 @@
 #!/usr/bin/make
+#
+# Include this file BEFORE you start assigning variables.
+# It gives some utilities.
+#
+# Created on: 08.11.16
 
 # Second expansion required for some implicit rules. See further.
 .SECONDEXPANSION:
 
 # Some usefull paths independent from the caller.
-export UTILS_PATH = $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
-export ROOT_PATH = $(realpath $(dir $(UTILS_PATH)))
+export UTILS_DIR  := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
+export ROOT_DIR   := $(realpath $(dir $(UTILS_DIR)))
 
-PACKAGES   :=
-FILES      :=
-DIRS       :=
+# Formatting utils
+include $(UTILS_DIR)/format.mk
 
-include $(UTILS_PATH)/format.mk 
+# Global variable initialization (as simple variables)
+PACKAGES          :=
+FILES             :=
+DIRS              :=
 
 # Definition of New Line character for code generation.
 define NL
 
 
-endef
-
-# Small canned recipes as utils
-define recipe.envsubst
-@$(ECHO) $(call msg_g,CONFIG,'$<' -> '$@')
-@envsubst '$(addsuffix },$(addprefix $${,$(VAR_LIST)))' <$< >$@
 endef
 
 # Got it from the gmake manual itself ;)
@@ -41,3 +42,4 @@ else
   $(error Your package management is not compatible with these makefiles.) 
 endif
 
+__PRE_VAR_MK := 1

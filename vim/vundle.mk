@@ -1,13 +1,15 @@
 #!/usr/bin/make
-
-include ../utils/utils.mk
-include $(UTILS_PATH)/format.mk
+#
+# Vundle component for vim assistant makefiles
+#
+# Created on: 08.11.16
 
 # To avoid 'cheating' vundle uses the same mechanism than for other plugins.
 # But you want Vundle to be loaded first. Believe me.
-PLUGINS := gmarik/Vundle.vim ${PLUGINS}
-SECTIONS := VUNDLE_SECTION ${SECTIONS}
-_VUNDLE_PATH := $(VIM_BUNDLE_PATH)/Vundle.vim
+PLUGINS       := gmarik/Vundle.vim ${PLUGINS}
+SECTIONS      := VUNDLE_SECTION ${SECTIONS}
+PACKAGES      := vundle $(PACKAGES)
+_VUNDLE_DIR   := $(_VIM_BUNDLE_DIR)/Vundle.vim
 
 define VUNDLE_SECTION
 " Vundle is a plugin manager for vim.
@@ -29,15 +31,13 @@ Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 call vundle#end()
 endef
 
-INSTALL_TARGETS := vundle.install $(INSTALL_TARGETS)
-vundle.install:
+vundle.install: | $(_VIM_BUNDLE_DIR)
 	@$(ECHO) $(call msg_g,INSTAL,Installing vundle for vim)
-	mkdir -p $(VIM_BUNDLE_PATH)
-	if [ -d "$(_VUNDLE_PATH)" ]; then \
+	@if [ ! -d "$(_VUNDLE_DIR)" ]; then \
 	  git clone https://github.com/VundleVim/Vundle.vim.git \
-		$(VIM_BUNDLE_PATH)/Vundle.vim; \
+		$(_VIM_BUNDLE_DIR)/Vundle.vim; \
 	else \
-	  cd $(_VUNDLE_PATH); \
+	  cd $(_VUNDLE_DIR); \
 	  git pull; \
 	fi
 	vim +PluginInstall +qall;

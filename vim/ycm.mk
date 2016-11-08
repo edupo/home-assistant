@@ -1,7 +1,11 @@
 #!/usr/bin/make
+#
+# Ycm component for vim assistant makefiles
+#
+# Created on: 08.11.16
 
-PLUGINS += Valloric/YouCompleteMe
-SECTIONS += YCM_SECTION
+PLUGINS     += Valloric/YouCompleteMe
+SECTIONS    += YCM_SECTION
 
 define YCM_SECTION
 " YCM

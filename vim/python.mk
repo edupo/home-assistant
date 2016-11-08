@@ -1,6 +1,11 @@
+#!/usr/bin/make
+#
+# Python language configuration
+#
+# Created on: 08.11.16
 
-PLUGINS += tmhedberg/SimpylFold vim-scripts/indentpython.vim nvie/vim-flake8
-SECTIONS += PYTHON_SECTION
+PLUGINS    += tmhedberg/SimpylFold vim-scripts/indentpython.vim nvie/vim-flake8
+SECTIONS   += PYTHON_SECTION
 
 define PYTHON_SECTION
 " Python
@@ -21,7 +26,7 @@ py << EOF
 import os.path
 import sys
 import vim
-if 'VIRTUA_ENV' in os.environ:
+if 'VIRTUAL_ENV' in os.environ:
     project_base_dir = os.environ['VIRTUAL_ENV']
     sys.path.insert(0, project_base_dir)
     activate_this = os.path.join(project_base_dir,'bin/activate_this.py')
