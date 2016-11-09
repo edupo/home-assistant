@@ -56,3 +56,6 @@ alias install="sudo apt-get install"
 # stylish
 alias style="astyle --style=allman --indent=force-tab --indent-cases --break-blocks --pad-oper --pad-header -k1 -W1 -j -O"
 alias pre="style *.cpp *.h"
+
+# python
+alias py="python"

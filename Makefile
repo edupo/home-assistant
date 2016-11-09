@@ -12,9 +12,7 @@ export HOME?=$(shell echo $HOME)
 
 _VALID_MAIN_GOALS = install config clean uninstall clean.all
 _MAIN_GOALS := $(or $(filter $(_VALID_MAIN_GOALS),$(MAKECMDGOALS)),"config")
-$(info $(_MAIN_GOALS))
 MAKECMDGOALS := $(filter-out $(_VALID_MAIN_GOALS),$(MAKECMDGOALS))
-$(info $(MAKECMDGOALS))
 
 _MODULES = git bash vim tmux django
 
