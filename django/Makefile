@@ -17,7 +17,7 @@ include ../utils/post-var.mk
 install: $(HOME)/p3.activate 
 
 $(HOME)/p3.activate: | virtualenv.install $(_P3_ENV_DIR)
-	$(gr)virtualenv --python=python3 $(_P3_ENV_DIR)$(no)
+	virtualenv --python=python3 $(_P3_ENV_DIR)$(no)
 	. $(_P3_ENV_DIR)/bin/activate; pip install Django
 	ln -s $(_P3_ENV_DIR)/bin/activate $(HOME)/p3.activate
 
