@@ -17,7 +17,7 @@ _VIM_BUNDLE_DIR := $(_VIM_USER_DIR)/bundle
 _VIM_FTPLUG_DIR := $(HOME)/.vim/ftplugin
 
 # File
-_VIMRC_FILE     := $(_VIM_USER_DIR)/.vimrc
+_VIMRC_FILE     := $(HOME)/.vimrc
 _HELP_FILE      := $(_VIM_FTPLUG_DIR)/help.vim
 
 # Components are the files which will generate the final rc file.
@@ -31,7 +31,6 @@ PACKAGES := vim $(PACKAGES)
 include $(UTILS_DIR)/post-var.mk
 
 # vimrc body generation
-SECTIONS := $(foreach d,$(filter _%_SECTION,$(.VARIABLES)),$(value $(v)))
 export BODY = $(foreach section,$(SECTIONS)\
 	,"--- $(section) ---"$(NL)$(NL)$($(section))$(NL)$(NL))
 VAR_LIST += BODY

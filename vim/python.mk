@@ -7,6 +7,8 @@
 PLUGINS    += tmhedberg/SimpylFold vim-scripts/indentpython.vim nvie/vim-flake8
 SECTIONS   += PYTHON_SECTION
 
+DOLLAR=$
+
 define PYTHON_SECTION
 " Python
 let g:ycm_python_binary_path = 'python3'
@@ -16,7 +18,7 @@ au BufRead,BufNewFile *.py,*.pyw
 		\ set shiftwidth=4 | 
 		\ set expandtab |
 		\ match BadWhitespace /^\t\+/ |
-		\ match BadWhitespace /\s\+$/ |
+		\ match BadWhitespace /\s\+$$/ |
 		\ set textwidth=100 |
 		\ set fileformat=unix |
 au BufRead,BufNewFile *.py 
