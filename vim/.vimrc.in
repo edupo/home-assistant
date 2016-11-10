@@ -27,6 +27,11 @@ highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 match OverLength /\%81v.\+/
 set colorcolumn=81
 
+" Handy strip function
+function! Strip(input_string)
+        return substitute(a:input_string, '^\s*\(.\{-}\)[\s\n]*$', '\1', '')
+endfunction
+
 ${BODY}
 
 " Enable folding

@@ -20,10 +20,11 @@ fi
 endef
 
 ### Rules ###
-$(_GITCONFIG_FILE):
+$(_GITCONFIG_FILE): Makefile
 	@$(ECHO) $(call msg_g,CONFIG,Configuring 'git')
 	$(GCFG) core.excludesfile '$(realpath gitignore)'
 	$(GCFG) push.default simple
 	$(call git.config,user.name,complete user name)
 	$(call git.config,user.email,user email)
+	$(call git.config,user.github,github user)
 	$(call git.config,user.company,company name)

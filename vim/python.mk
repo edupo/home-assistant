@@ -24,6 +24,7 @@ au BufRead,BufNewFile *.py,*.pyw
 au BufRead,BufNewFile *.py 
 		\ set softtabstop=4
 let python_highlight_all=1
+
 py << EOF
 import os.path
 import sys

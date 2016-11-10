@@ -14,6 +14,12 @@ set rtp+=$(SNIPS_PARENT_DIR)
 " Snippets directory
 let g:UltiSnipsSnippetsDir="$(SNIPS_PARENT_DIR)/UltiSnips"
 
+" Snippets variables
+let g:snips_author=Strip(system('git config --global --get user.name'))
+let g:snips_email=Strip(system('git config --global --get user.email'))
+let g:snips_github=Strip(system('git config --global --get user.github'))
+let g:snips_company=Strip(system('git config --global --get user.company'))
+
 let g:UltiSnipsExpandTrigger="<c-space>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
