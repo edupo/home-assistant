@@ -43,6 +43,9 @@ msg_g = "[$(gr)$(1)$(no)] $(time) : $(2)"
 msg_r = "[$(rd)$(1)$(no)] $(time) : $(2)"
 msg_y = "[$(ye)$(1)$(no)] $(time) : $(2)"
 msg_b = "[$(bl)$(1)$(no)] $(time) : $(2)"
+msg_ok   = $(call msg_g,  OK  ,$(1))
+msg_warn = $(call msg_y, WARN ,$(1))
+msg_err  = $(call msg_r,ERROR ,$(1))
 
 # Output formatting
 tab_out = $(1) $(TAB_STDOUT) 
