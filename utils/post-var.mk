@@ -17,8 +17,16 @@ DIRS += $(foreach d,$(filter _%_DIR,$(.VARIABLES)),$(value $(d)))
 DIRS += $(dir $(FILES))
 DIRS := $(sort $(DIRS)) 
 
+%.pipinstall: python-pip.install
+	@if [ -z "`pip list --format=columns | grep $(basename $@)`" ]; then \
+	  $(call pip.install,$(basename $@)); \
+	  $(ECHO) $(call msg_ok,Installed '$(basename $@)'); \
+	else \
+	  $(ECHO) $(call msg_ok,'$(basename $@)' is already installed); \
+	fi
+
 %.install:
-	@if [ ! -e "$(call pathsearch,$(basename $@))" ]; then \
+	@if [ -z "`$(call sys.check,$(basename $@))`" ]; then \
 	  $(call sys.install,$(basename $@)); \
 	  $(ECHO) $(call msg_ok,Installed '$(basename $@)'); \
 	else \
@@ -26,7 +34,7 @@ DIRS := $(sort $(DIRS))
 	fi
 
 %.uninstall:
-	@if [ -e "$(call pathsearch,$(basename $@))" ]; then \
+	@if [ ! -z "`$(call sys.check,$(basename $@))`" ]; then \
 	  $(call sys.uninstall,$(basename $@)); \
 	  $(ECHO) $(call msg_ok,Uninstalled '$(basename $@)'); \
 	else \
@@ -34,7 +42,8 @@ DIRS := $(sort $(DIRS))
 	fi
 
 %.check:
-	@if [ ! -e "$(call pathsearch,$(basename $@))" ]; then \
+	@if [ -z "`$(call sys.check,$(basename $@))`" -a \
+	      -z "`$(call sys.check2,$(basename $@))`" ]; then \
 	  $(ECHO) $(call msg_err,'$(basename $@)' is not installed); \
 	else \
 	  $(ECHO) $(call msg_ok,'$(basename $@)' found); \
