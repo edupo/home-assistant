@@ -7,8 +7,6 @@
 PLUGINS    += tmhedberg/SimpylFold vim-scripts/indentpython.vim nvie/vim-flake8
 SECTIONS   += PYTHON_SECTION
 
-DOLLAR=$
-
 define PYTHON_SECTION
 " Python
 let g:ycm_python_binary_path = 'python3'
