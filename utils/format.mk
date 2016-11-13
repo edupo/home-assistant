@@ -14,6 +14,7 @@ ECHO := echo
 # Macros
 time := `date +"%H:%M:%S"`
 TAB_STDOUT := | sed 's/^/\t/'
+MUTE_STDERR := 2> /dev/null
 MUTE_STDOUT := 1> /dev/null
 MUTE_ALLOUT := &> /dev/null
 
