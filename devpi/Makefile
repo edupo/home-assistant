@@ -5,18 +5,19 @@
 #
 # http://doc.devpi.net/latest/index.html
 
-include scripts/paths.mk
-include scripts/utils/utils.mk
+include ../utils/pre-var.mk
+include ../paths.mk
 
-export DEVPI_USER=devpi
-export DEVPI_GROUP=devpi
-export DEVPI_HOME=/opt/devpi
+### Variables ###
 
-DEVPI_PROFILE=$(DEVPI_HOME)/.profile
+DEVPI_USER=devpi
+DEVPI_GROUP=devpi
 
-DEVPI_SERVICE_FILE=devpi.service
-DEVPI_SERVICE_FILE_IN=../systemd.service/$(DEVPI_SERVICE_FILE).in
-DEVPI_SERVICE_FILE_OUT=$(SYSTEMD_SYSTEM_DIR)/$(DEVPI_SERVICE_FILE)
+_DEVPI_HOME_DIR=/opt/devpi
+
+_DEVPI_SERVICE_FILE=$(SYSTEMD_SYSTEM_DIR)/devpi.service
+
+include ../utils/post-var.mk
 
 setup: $(SYSTEMD_SYSTEM_DIR) | systemctl.check envsubst.check useradd.check
 	# Creating home folder
