@@ -25,6 +25,8 @@ _HELP_FILE      := $(_VIM_FTPLUG_DIR)/help.vim
 COMPONENTS 	:= ultisnips.mk python.mk ycm.mk
 COMPONENTS 	+= vundle.mk
 
+PLUGINS         := scrooloose/nerdcommenter
+
 include $(COMPONENTS)
 PACKAGES := vim $(PACKAGES)
 
