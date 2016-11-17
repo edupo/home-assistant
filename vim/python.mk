@@ -4,7 +4,8 @@
 #
 # Created on: 08.11.16
 
-PLUGINS    += tmhedberg/SimpylFold vim-scripts/indentpython.vim nvie/vim-flake8
+PLUGINS    += tmhedberg/SimpylFold vim-scripts/indentpython.vim nvie/vim-flake8\
+	      tell-k/vim-autopep8
 SECTIONS   += PYTHON_SECTION
 
 DOLLAR=$
