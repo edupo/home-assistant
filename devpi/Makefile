@@ -19,6 +19,9 @@ _DEVPI_SERVICE_FILE=$(SYSTEMD_SYSTEM_DIR)/devpi.service
 
 include ../utils/post-var.mk
 
+
+_DEVPI_SERVICE_FILE: devpi.pipinstall 
+
 setup: $(SYSTEMD_SYSTEM_DIR) | systemctl.check envsubst.check useradd.check
 	# Creating home folder
 	mkdir -p $(DEVPI_HOME)
