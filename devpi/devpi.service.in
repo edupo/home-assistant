@@ -2,6 +2,7 @@
 Requires=network-online.target
 After=network-online.target
 
+[Service]
 Type=forking
 PIDFile=${DEVPI_HOME}/.xproc/devpi-server/xprocess.PID
 Restart=always
