@@ -19,11 +19,11 @@ _MODULES = git bash vim tmux django
 ### General rules ###
 .PHONY: all $(_MODULES)
 $(_MODULES):
-	@$(ECHO) $(call msg_g,ASSIST,Doing '$(_MAIN_GOALS)' for '$@')
 	@$(MAKE) --no-print-directory --directory=$@ $(_MAIN_GOALS)
+	@$(ECHO) $(call msg_ok,Done '$(_MAIN_GOALS)' for '$@')
 
 all: $(_MODULES)
-	@$(ECHO) $(call msg_g,ASSIST,All done.)
+	@$(ECHO) $(call msg_ok,All done.)
 
 .PHONY: $(_VALID_MAIN_GOALS)
 $(_VALID_MAIN_GOALS): ;

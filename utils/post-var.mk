@@ -12,44 +12,54 @@ ifndef __PRE_VAR_MK
 endif
 
 # Generation of lists used by some standard targets.
-FILES = $(foreach v,$(filter _%_FILE,$(.VARIABLES)),$(value $(v)))
-DIRS += $(foreach d,$(filter _%_DIR,$(.VARIABLES)),$(value $(v)))
+FILES := $(foreach v,$(filter _%_FILE,$(.VARIABLES)),$(value $(v)))
+DIRS += $(foreach d,$(filter _%_DIR,$(.VARIABLES)),$(value $(d)))
 DIRS += $(dir $(FILES))
 DIRS := $(sort $(DIRS)) 
 
-%.install:
-	@if [ ! -e "$(call pathsearch,$(basename $@))" ]; then \
-	  $(ECHO) $(call msg_g,INSTAL,Installing '$(basename $@)'); \
-	  $(call sys.install,$(basename $@)); \
+%.pipinstall: python-pip.install
+	@if [ -z "`pip list --format=columns | grep $(basename $@)`" ]; then \
+	  $(call pip.install,$(basename $@)); \
+	  $(ECHO) $(call msg_ok,Installed '$(basename $@)'); \
 	else \
-	  $(ECHO) $(call msg_g,INSTAL,'$(basename $@)' is already installed); \
+	  $(ECHO) $(call msg_ok,'$(basename $@)' is already installed); \
+	fi
+
+%.install:
+	@if [ -z "`$(call sys.check,$(basename $@))`" ]; then \
+	  $(call sys.install,$(basename $@)); \
+	  $(ECHO) $(call msg_ok,Installed '$(basename $@)'); \
+	else \
+	  $(ECHO) $(call msg_ok,'$(basename $@)' is already installed); \
 	fi
 
 %.uninstall:
-	@if [ -e "$(call pathsearch,$(basename $@))" ]; then \
-	  $(ECHO) $(call msg_g,UINST ,Uninstalling '$(basename $@)'); \
+	@if [ ! -z "`$(call sys.check,$(basename $@))`" ]; then \
 	  $(call sys.uninstall,$(basename $@)); \
+	  $(ECHO) $(call msg_ok,Uninstalled '$(basename $@)'); \
 	else \
-	  $(ECHO) $(call msg_g,UINST ,'$(basename $@)' is not installed); \
+	  $(ECHO) $(call msg_ok,'$(basename $@)' is not installed); \
 	fi
 
 %.check:
-	@if [ ! -e "$(call pathsearch,$(basename $@))" ]; then \
-	  $(ECHO) $(call msg_r,ERROR ,'$(basename $@)' is not installed); \
+	@if [ -z "`$(call sys.check,$(basename $@))`" -a \
+	      -z "`$(call sys.check2,$(basename $@))`" ]; then \
+	  $(ECHO) $(call msg_err,'$(basename $@)' is not installed); \
 	else \
-	  $(ECHO) $(call msg_g,CHECK ,'$(basename $@)' found); \
+	  $(ECHO) $(call msg_ok,'$(basename $@)' found); \
 	fi
 
 # Implicit terminal rule for .in files. This rule is only executed if the target
 # file has a .in file inside the Makefile directory.
 # Ex: '~/.basrc' will only be substituted if '.bashrc.in' exist.
 %:: $$(notdir $$@).in Makefile | $$(dir $$@)
-	@$(ECHO) $(call msg_g,CONFIG,'$<' -> '$@')
 	@envsubst '$(addsuffix },$(addprefix $${,$(VAR_LIST)))' <$< >$@
+	@$(ECHO) $(call msg_ok,'$<' -> '$@')
 
 # Directory creation rule
 $(DIRS):
 	mkdir -p $@
+	@$(ECHO) $(call msg_ok,Directory '$@')
 
 # Main targets rules
 .PHONY: config clean install uninstall

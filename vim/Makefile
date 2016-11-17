@@ -6,10 +6,17 @@
 # information 
 #
 # Created on: 08.11.16
-.SECONDEXPANSION:
 
 include ../utils/pre-var.mk
 ### Variables ###
+
+# vim
+export VIM_TARGET_VERSION := 8.0
+export VIM_BIN            := $(shell which vim)
+ifneq ($(VIM_BIN),)
+  export VIM_VERSION      := $(shell vim --version | sed '/IMproved/!d' | \
+                               sed 's/^.*IMproved \([0-9]*\.[0-9]*\) .*$$/\1/')
+endif
 
 # Directories
 _VIM_USER_DIR   := $(HOME)/.vim
@@ -30,7 +37,7 @@ PLUGINS         := scrooloose/nerdcommenter
 include $(COMPONENTS)
 PACKAGES := vim $(PACKAGES)
 
-include $(UTILS_DIR)/post-var.mk
+include ../utils/post-var.mk
 
 # vimrc body generation
 export BODY = $(foreach section,$(SECTIONS)\
@@ -39,3 +46,9 @@ VAR_LIST += BODY
 
 ### Specific rules ###
 $(_VIMRC_FILE): $(COMPONENTS) 
+
+vim.install:
+	@if [ ! "$(VIM_VERSION)" = "$(VIM_TARGET_VERSION)" ]; then \
+	  sh vim$(VIM_TARGET_VERSION)_ubuntu_build.sh; \
+	fi
+	@$(ECHO) $(call msg_ok,'$(basename $@)' is installed); \

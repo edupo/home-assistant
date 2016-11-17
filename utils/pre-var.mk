@@ -34,10 +34,11 @@ pathsearch = $(firstword $(wildcard $(addsuffix /$(1), $(subst :, ,$(PATH)))))
 # managers. Rigth now only 'apt-get' is supported with 'Debian' packages.
 # Deal with it.
 ifneq ($(call pathsearch,apt-get),)
-  _SYS_PM_INSTALL = sudo apt-get install
-  _SYS_PM_UNINSTALL = sudo apt-get remove
-  sys.install = $(_SYS_PM_INSTALL) $(if $(UNATTENDED),-y) $(1)
-  sys.uninstall = $(_SYS_PM_UNINSTALL) $(if $(UNATTENDED),-y) $(1)
+  sys.check     = dpkg --status $(1) $(MUTE_STDERR) | grep installed
+  sys.check2    = which $(1)
+  sys.install   = sudo apt-get install $(if $(UNATTENDED),-y) $(1)
+  sys.uninstall = sudo apt-get remove $(if $(UNATTENDED),-y) $(1)
+  pip.install   = sudo pip install $(1)
 else
   $(error Your package management is not compatible with these makefiles.) 
 endif
