@@ -1,8 +1,6 @@
 #!/usr/bin/make
 #
 # Git home assistance makefile
-#
-# Created on: 04.11.16
 
 include ../utils/pre-var.mk
 
