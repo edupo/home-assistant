@@ -56,21 +56,19 @@ _HOME_FILES := $(filter-out $(_SYSTEM_FILES), $(FILES))
 	  $(if $(VERBOSE),$(ECHO) $(call msg_ok,'$(basename $@)' found);) \
 	fi
 
-# Implicit terminal rule for .in files. This rule is only executed if the target
-# file has a .in file inside the Makefile directory.
-# Ex: '~/.basrc' will only be substituted if '.bashrc.in' exist.
+# File creation rules
 $(_HOME_FILES): $$(notdir $$@).in Makefile | $$(dir $$@)
-	@$(cr.envsubst)
+	$(cr.envsubst)
 
 $(_SYSTEM_FILES): $$(notdir $$@).in Makefile | $$(dir $$@) sudo.check
-	@$(cr.sudo.envsubst)
+	$(cr.sudo.envsubst)
 
 # Directory creation rule
 $(_HOME_DIRS):
-	@$(cr.mkdir)
+	$(cr.mkdir)
 
 $(_SYSTEM_DIRS): | sudo.check
-	@$(cr.sudo.mkdir)
+	$(cr.sudo.mkdir)
 
 # Main targets rules
 .PHONY: config clean install uninstall
@@ -101,7 +99,6 @@ info:
 	@$(ECHO) "ROOT_DIRECTORY: $(ROOT_DIR)"
 	@$(ECHO) "UTILITIES DIRECTORIES: $(UTILS_DIR)"
 	@$(ECHO) "HOME: $(HOME)"
-	@$(ECHO) $(FILES) $(DIRS)
 	@$(ECHO) "HOME DIRECTORIES: \
 		$(addprefix \n\t,$(_HOME_DIRS))"
 	@$(ECHO) "SYSTEM DIRECTORIES: \

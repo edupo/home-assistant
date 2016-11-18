@@ -29,41 +29,50 @@ endef
 # Got it from the gmake manual itself ;)
 pathsearch = $(firstword $(wildcard $(addsuffix /$(1), $(subst :, ,$(PATH)))))
 
-# System level functions
-sys.mkdir = mkdir -p $(1)
-sys.envsubst = envsubst '$(VAR_LIST:%=$${%})' <$(1) >$(2)
-
-define cr.mkdir
-$(call sys.mkdir,$@)
-@$(ECHO) $(call msg_ok,Directory '$@')
-endef
-
-define cr.sudo.mkdir
-sudo $(cr.mkdir)
-endef
-
-define cr.envsubst
-$(call sys.envsubst,$<,$@)
-@$(ECHO) $(call msg_ok,'$<' -> '$@')
-endef
-
-define cr.sudo.envsubst
-sudo sh -c '$(call sys.envsubst,$<,$@)'
-@$(ECHO) $(call msg_ok,'$<' -> '$@')
-endef
-
 # Automatic installation stuff 
-# TODO: It could be a difference in package naming between different os pkg
-# managers. Rigth now only 'apt-get' is supported with 'Debian' packages.
-# Deal with it.
+# TODO: more reliable system to detect OS ex.: uname
 ifneq ($(call pathsearch,apt-get),)
+  sys.mkdir     = mkdir -p $(1)
+  sys.envsubst  = envsubst '$(VAR_LIST:%=$${%})' <$(1) >$(2)
   sys.check     = dpkg --status $(1) $(MUTE_STDERR) | grep installed
   sys.check2    = which $(1)
   sys.install   = sudo apt-get install $(if $(UNATTENDED),-y) $(1)
   sys.uninstall = sudo apt-get remove $(if $(UNATTENDED),-y) $(1)
   pip.install   = sudo pip install $(1)
 else
-  $(error Your package management is not compatible with these makefiles.) 
+  $(error Your system is not compatible with these makefiles.) 
 endif
+
+# Canned recipes
+define cr.chown
+$(if $(USER),sudo chown $(USER) $@)
+$(if $(GROUP),sudo chown :$(GROUP) $@)
+endef
+
+define cr.mkdir
+$(call sys.mkdir,$@)
+$(cr.chown)
+@$(ECHO) $(call msg_ok,Directory '$@')
+endef
+
+define cr.sudo.mkdir
+sudo $(call sys.mkdir,$@)
+$(cr.chown)
+@$(ECHO) $(call msg_ok,Directory '$@')
+endef
+
+define cr.envsubst
+$(call sys.envsubst,$<,$@)
+$(cr.chown)
+@$(ECHO) $(call msg_ok,'$<' -> '$@')
+endef
+
+define cr.sudo.envsubst
+$(call sys.envsubst,$<,.$(subst .in,.out,$<))
+sudo cp .$(subst .in,.out,$<) $@
+$(cr.chown)
+@$(ECHO) $(call msg_ok,'$<' -> '$@')
+endef
+
 
 __PRE_VAR_MK := 1
