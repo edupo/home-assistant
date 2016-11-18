@@ -53,7 +53,7 @@ DIRS := $(sort $(DIRS))
 # file has a .in file inside the Makefile directory.
 # Ex: '~/.basrc' will only be substituted if '.bashrc.in' exist.
 %:: $$(notdir $$@).in Makefile | $$(dir $$@)
-	@envsubst '$(addsuffix },$(addprefix $${,$(VAR_LIST)))' <$< >$@
+	@envsubst '$(VAR_LIST:%=$${%})' <$< >$@
 	@$(ECHO) $(call msg_ok,'$<' -> '$@')
 
 # Directory creation rule
