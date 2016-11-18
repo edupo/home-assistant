@@ -3,11 +3,13 @@ Requires=network-online.target
 After=network-online.target
 
 [Service]
+${DEVPI_SERVICE_CERTS_MACRO}
+
 Type=forking
-PIDFile=${DEVPI_HOME}/.xproc/devpi-server/xprocess.PID
+PIDFile=${_DEVPI_HOME_DIR}/.xproc/devpi-server/xprocess.PID
 Restart=always
 
-ExecStart=/usr/local/bin/devpi-server --port 4040 --serverdir ${DEVPI_HOME} --start
-ExecStop=/usr/local/bin/devpi-server --port 4040 --serverdir ${DEVPI_HOME} --stop
+ExecStart=/usr/local/bin/devpi-server --port 4040 --serverdir ${_DEVPI_HOME_DIR} --start
+ExecStop=/usr/local/bin/devpi-server --port 4040 --serverdir ${_DEVPI_HOME_DIR} --stop
 
 User=${DEVPI_USER}
