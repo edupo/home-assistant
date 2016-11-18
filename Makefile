@@ -14,7 +14,7 @@ _VALID_MAIN_GOALS = install config clean uninstall clean.all
 _MAIN_GOALS := $(or $(filter $(_VALID_MAIN_GOALS),$(MAKECMDGOALS)),"config")
 MAKECMDGOALS := $(filter-out $(_VALID_MAIN_GOALS),$(MAKECMDGOALS))
 
-_MODULES = git bash vim tmux django
+_MODULES = ca-certs git bash devpi vim tmux django
 
 ### General rules ###
 .PHONY: all $(_MODULES)
