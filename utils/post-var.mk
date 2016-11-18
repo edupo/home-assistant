@@ -52,8 +52,8 @@ _HOME_FILES := $(filter-out $(_SYSTEM_FILES), $(FILES))
 	@if [ -z "`$(call sys.check,$(basename $@))`" -a \
 	      -z "`$(call sys.check2,$(basename $@))`" ]; then \
 	  $(ECHO) $(call msg_err,'$(basename $@)' is not installed); \
-	else \
-	  $(ECHO) $(call msg_ok,'$(basename $@)' found); \
+	$(if $(VERBOSE),else) \
+	  $(if $(VERBOSE),$(ECHO) $(call msg_ok,'$(basename $@)' found);) \
 	fi
 
 # Implicit terminal rule for .in files. This rule is only executed if the target
@@ -62,14 +62,14 @@ _HOME_FILES := $(filter-out $(_SYSTEM_FILES), $(FILES))
 $(_HOME_FILES): $$(notdir $$@).in Makefile | $$(dir $$@)
 	@$(cr.envsubst)
 
-$(_SYSTEM_FILES): $$(notdir $$@).in Makefile | $$(dir $$@)
+$(_SYSTEM_FILES): $$(notdir $$@).in Makefile | $$(dir $$@) sudo.check
 	@$(cr.sudo.envsubst)
 
 # Directory creation rule
 $(_HOME_DIRS):
 	@$(cr.mkdir)
 
-$(_SYSTEM_DIRS): sudo.check
+$(_SYSTEM_DIRS): | sudo.check
 	@$(cr.sudo.mkdir)
 
 # Main targets rules
