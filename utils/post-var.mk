@@ -12,10 +12,17 @@ ifndef __PRE_VAR_MK
 endif
 
 # Generation of lists used by some standard targets.
-FILES := $(foreach v,$(filter _%_FILE,$(.VARIABLES)),$(value $(v)))
-DIRS += $(foreach d,$(filter _%_DIR,$(.VARIABLES)),$(value $(d)))
-DIRS += $(dir $(FILES))
-DIRS := $(sort $(DIRS)) 
+FILES         := $(foreach v,$(filter _%_FILE,$(.VARIABLES)),$(value $(v)))
+DIRS          += $(foreach d,$(filter _%_DIR,$(.VARIABLES)),$(value $(d)))
+DIRS          += $(dir $(FILES))
+DIRS          := $(sort $(DIRS)) 
+
+# We divide the files in two groups: Those which are in your home and those
+# which doesn't. This is used to properly apply sudo.
+_SYSTEM_DIRS    := $(filter-out ~% $(HOME)%, $(DIRS))
+_HOME_DIRS  := $(filter-out $(_SYSTEM_DIRS), $(DIRS))
+_SYSTEM_FILES   := $(filter-out ~% $(HOME)%, $(FILES))
+_HOME_FILES := $(filter-out $(_SYSTEM_FILES), $(FILES))
 
 %.pipinstall: python-pip.install
 	@if [ -z "`pip list --format=columns | grep $(basename $@)`" ]; then \
@@ -52,14 +59,18 @@ DIRS := $(sort $(DIRS))
 # Implicit terminal rule for .in files. This rule is only executed if the target
 # file has a .in file inside the Makefile directory.
 # Ex: '~/.basrc' will only be substituted if '.bashrc.in' exist.
-%:: $$(notdir $$@).in Makefile | $$(dir $$@)
-	@envsubst '$(VAR_LIST:%=$${%})' <$< >$@
-	@$(ECHO) $(call msg_ok,'$<' -> '$@')
+$(_HOME_FILES): $$(notdir $$@).in Makefile | $$(dir $$@)
+	@$(cr.envsubst)
+
+$(_SYSTEM_FILES): $$(notdir $$@).in Makefile | $$(dir $$@)
+	@$(cr.sudo.envsubst)
 
 # Directory creation rule
-$(DIRS):
-	mkdir -p $@
-	@$(ECHO) $(call msg_ok,Directory '$@')
+$(_HOME_DIRS):
+	@$(cr.mkdir)
+
+$(_SYSTEM_DIRS): sudo.check
+	@$(cr.sudo.mkdir)
 
 # Main targets rules
 .PHONY: config clean install uninstall
@@ -71,7 +82,7 @@ clean:
 	  $(addprefix \n\t,$(FILES))"
 	@read -r -p "Are you sure?$(no) " REPLY; \
 	if [ "$$REPLY" = "Y" ] || [ "$$REPLY" = "y" ]; then \
-	  rm $(FILES); \
+	  sudo rm $(FILES); \
 	fi
 
 clean.all:
@@ -79,7 +90,7 @@ clean.all:
 	  $(addprefix \n\t,$(DIRS))"
 	@read -r -p "Are you sure?$(no) " REPLY; \
 	if [ "$$REPLY" = "Y" ] || [ "$$REPLY" = "y" ]; then \
-	  rm -fr $(DIRS); \
+	  sudo rm -fr $(DIRS); \
 	fi
 
 install: $(addsuffix .install,$(PACKAGES))
@@ -89,8 +100,13 @@ uninstall: $(addsuffix .uninstall,$(PACKAGES))
 info:
 	@$(ECHO) "ROOT_DIRECTORY: $(ROOT_DIR)"
 	@$(ECHO) "UTILITIES DIRECTORIES: $(UTILS_DIR)"
-	@$(ECHO) "DIRECTORIES: \
-		$(addprefix \n\t,$(DIRS))"
-	@$(ECHO) "FILES: \
-		$(addprefix \n\t,$(FILES))"
-
+	@$(ECHO) "HOME: $(HOME)"
+	@$(ECHO) $(FILES) $(DIRS)
+	@$(ECHO) "HOME DIRECTORIES: \
+		$(addprefix \n\t,$(_HOME_DIRS))"
+	@$(ECHO) "SYSTEM DIRECTORIES: \
+		$(addprefix \n\t,$(_SYSTEM_DIRS))"
+	@$(ECHO) "HOME FILES: \
+		$(addprefix \n\t,$(_HOME_FILES))"
+	@$(ECHO) "SYSTEM FILES: \
+		$(addprefix \n\t,$(_SYSTEM_FILES))"

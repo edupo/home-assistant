@@ -29,6 +29,29 @@ endef
 # Got it from the gmake manual itself ;)
 pathsearch = $(firstword $(wildcard $(addsuffix /$(1), $(subst :, ,$(PATH)))))
 
+# System level functions
+sys.mkdir = mkdir -p $(1)
+sys.envsubst = envsubst '$(VAR_LIST:%=$${%})' <$(1) >$(2)
+
+define cr.mkdir
+$(call sys.mkdir,$@)
+@$(ECHO) $(call msg_ok,Directory '$@')
+endef
+
+define cr.sudo.mkdir
+sudo $(cr.mkdir)
+endef
+
+define cr.envsubst
+$(call sys.envsubst,$<,$@)
+@$(ECHO) $(call msg_ok,'$<' -> '$@')
+endef
+
+define cr.sudo.envsubst
+sudo sh -c '$(call sys.envsubst,$<,$@)'
+@$(ECHO) $(call msg_ok,'$<' -> '$@')
+endef
+
 # Automatic installation stuff 
 # TODO: It could be a difference in package naming between different os pkg
 # managers. Rigth now only 'apt-get' is supported with 'Debian' packages.
