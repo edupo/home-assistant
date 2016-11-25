@@ -5,7 +5,7 @@
 include ../utils/pre-var.mk
 
 ### Variables ###
-_GITCONFIG_FILE := $(HOME)/.gitconfig
+GITCONFIG_FILE := $(HOME)/.gitconfig
 GCFG            := git config --global
 
 include ../utils/post-var.mk
@@ -18,7 +18,9 @@ fi
 endef
 
 ### Rules ###
-$(_GITCONFIG_FILE): Makefile
+config: $(GITCONFIG_FILE)
+
+$(GITCONFIG_FILE): Makefile
 	@$(ECHO) $(call msg_g,CONFIG,Configuring 'git')
 	$(GCFG) core.excludesfile '$(realpath gitignore)'
 	$(GCFG) push.default simple
