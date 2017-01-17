@@ -24,6 +24,8 @@ $(GITCONFIG_FILE): Makefile
 	@$(ECHO) $(call msg_g,CONFIG,Configuring 'git')
 	$(GCFG) core.excludesfile '$(realpath gitignore)'
 	$(GCFG) push.default simple
+	$(GCFG) credential.helper cache
+	$(GCFG) credential.helper 'cache --timeout=3600'
 	$(call git.config,user.name,complete user name)
 	$(call git.config,user.email,user email)
 	$(call git.config,user.github,github user)
