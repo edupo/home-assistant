@@ -20,14 +20,6 @@ call vundle#begin()
 
 $(foreach plugin,$(PLUGINS),Plugin '$(plugin)'$(NL))
 
-" To be tested
-Plugin 'jistr/vim-nerdtree-tabs'
-Plugin 'kien/ctrlp.vim'
-Plugin 'tpope/vim-fugitive'
-Plugin 'scrooloose/syntastic'
-Plugin 'scrooloose/nerdtree'
-Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
-
 call vundle#end()
 endef
 

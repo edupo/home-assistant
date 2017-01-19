@@ -1,22 +1,15 @@
-" Putting some color to a grey live.
+" Default settings
 syntax on
-
-" Learning to count. What do you think?
 set number
-
-" Encoding, that great mistery.
 set encoding=utf-8
-
-" Better safe than sorry.
 set nocompatible
-
-" Well OS has a pretty clipboard, you know.
 set clipboard=unnamed
-
-" I want backspace to behave like a 'normal' backspace.
 set backspace=indent,eol,start
+set expandtab
+set tabstop=4
+set shiftwidth=2
+set textwidth=80
 
-" Just during load.
 filetype off
 
 " Highlight groups

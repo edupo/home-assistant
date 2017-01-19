@@ -29,10 +29,12 @@ _HELP_FILE      := $(_VIM_FTPLUG_DIR)/help.vim
 
 # Components are the files which will generate the final rc file.
 # Note Vundle is always added the last.
-COMPONENTS 	:= ultisnips.mk python.mk ycm.mk
-COMPONENTS 	+= vundle.mk
+COMPONENTS      := ultisnips.mk python.mk ycm.mk
+COMPONENTS      += vundle.mk
 
-PLUGINS         := scrooloose/nerdcommenter
+PLUGINS         := scrooloose/nerdcommenter scrooloose/syntastic \
+                   scrooloose/nerdtree tpope/vim-jdaddy ngmy/vim-rubocop \
+                   ctrlpvim/ctrlp.vim jistr/vim-nerdtree-tabs
 
 include $(COMPONENTS)
 PACKAGES := vim $(PACKAGES)
@@ -41,7 +43,7 @@ include ../utils/post-var.mk
 
 # vimrc body generation
 export BODY = $(foreach section,$(SECTIONS)\
-	,"--- $(section) ---"$(NL)$(NL)$($(section))$(NL)$(NL))
+    ,"--- $(section) ---"$(NL)$(NL)$($(section))$(NL)$(NL))
 VAR_LIST += BODY
 
 ### Specific rules ###
@@ -49,6 +51,6 @@ $(_VIMRC_FILE): $(COMPONENTS)
 
 vim.install:
 	@if [ ! "$(VIM_VERSION)" = "$(VIM_TARGET_VERSION)" ]; then \
-	  sh vim$(VIM_TARGET_VERSION)_ubuntu_build.sh; \
-	fi
+      sh vim$(VIM_TARGET_VERSION)_ubuntu_build.sh; \
+    fi
 	@$(ECHO) $(call msg_ok,'$(basename $@)' is installed); \
