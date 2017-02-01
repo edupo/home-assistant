@@ -25,7 +25,8 @@ alias merge="git merge"
 alias stash="git stash"
 alias stas="git stash"
 alias binfo="git branch -vv"
-alias cleanb="git branch --merged master | grep -v master | xargs -n 1 git branch -d"
+alias bclean="git branch --merged master | grep -v master | xargs -n 1 git branch -d"
+alias subm="git submodule update --init --recursive"
 
 # bash 
 alias reload="source ~/.bashrc"
