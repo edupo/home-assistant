@@ -28,6 +28,12 @@ alias binfo="git branch -vv"
 alias bclean="git branch --merged master | grep -v master | xargs -n 1 git branch -d"
 alias subm="git submodule update --init --recursive"
 
+# kitchen
+alias kv="kitchen verify"
+alias kd="kitchen destroy"
+alias kc="kitchen converge"
+alias kr="kitchen destroy;kitchen converge"
+
 # bash 
 alias reload="source ~/.bashrc"
 
