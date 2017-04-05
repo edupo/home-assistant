@@ -21,8 +21,7 @@ let g:snips_github=Strip(system('git config --global --get user.github'))
 let g:snips_company=Strip(system('git config --global --get user.company'))
 
 let g:UltiSnipsExpandTrigger="<c-space>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsListSnippets="<c-b>"
 
 " :UltiSnipsEdit command splits current window
 let g:UltiSnipsEditSplit="vertical"
