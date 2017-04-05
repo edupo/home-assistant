@@ -36,6 +36,7 @@ alias kr="kitchen destroy;kitchen converge"
 
 # bash 
 alias reload="source ~/.bashrc"
+alias exit="tmux detach && exit"
 
 # path
 alias ..="cd .."
