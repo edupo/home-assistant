@@ -25,3 +25,12 @@ endsnippet
 snippet $
 $(${1})
 endsnippet
+
+snippet body "Body surronding makefiles" b
+ifndef __${1}
+__`!p t[1]`:=''
+
+
+
+endif #__`!p t[1]`
+endsnippet
