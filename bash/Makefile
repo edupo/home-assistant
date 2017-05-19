@@ -11,7 +11,7 @@ include ../utils/pre-var.mk
 _ALIAS_FILE                   := $(HOME)/.bash_aliases
 _BASHRC_FILE                  := $(HOME)/.bashrc
 
-export PROMPT_SCRIPT_FILE     := $(abspath prompt.sh) 
+export PROMPT_SCRIPT_FILE     := $(abspath prompt.sh)
 export GIT_SCRIPT_FILE        := $(abspath git.sh)
 export FILESEARCH_SCRIPT_FILE := $(abspath file_search.sh)
 
