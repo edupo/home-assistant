@@ -25,3 +25,8 @@ htmlcov
 
 # Chef
 Berksfile.lock
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
