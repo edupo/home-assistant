@@ -8,6 +8,7 @@
 alias s="git status"
 alias c="git commit -m"
 alias ca="git commit -a -m"
+alias amend="git commit --amend"
 alias aa="git add -A"
 alias au="git add -u"
 alias push="git push"
