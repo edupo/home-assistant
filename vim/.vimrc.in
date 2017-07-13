@@ -53,6 +53,17 @@ inoremap <     <><Esc>i
 inoremap "     ""<Esc>i
 inoremap '     ''<Esc>i
 
+" Jenkinsfile
+au BufRead,BufNewFile Jenkinsfile,Jenkinsfile.*
+        \ setf groovy |
+        \ set tabstop=2 |
+		\ set shiftwidth=2 | 
+		\ set expandtab |
+        \ set smartindent |
+  		\ match BadWhitespace /^\t\+/ |
+		\ match BadWhitespace /\s\+$/ |
+		\ set fileformat=unix
+
 " C
 au BufRead,BufNewFile *.c,*.h
     \ set tabstop=4 |
