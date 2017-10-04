@@ -18,6 +18,11 @@ _MODULES = ca-certs git bash vim tmux
 
 ### General rules ###
 .PHONY: all $(_MODULES)
+
+default:
+	@$(MAKE) install all 
+	@$(MAKE) config all 
+
 $(_MODULES):
 	@$(MAKE) --no-print-directory --directory=$@ $(_MAIN_GOALS)
 	@$(ECHO) $(call msg_ok,Done '$(_MAIN_GOALS)' for '$@')
