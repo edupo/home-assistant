@@ -14,9 +14,11 @@ filetype off
 
 " NERD tree
 map <C-n> :NERDTreeToggle<CR>
-autocmd vimenter * NERDTree
-autocmd VimEnter * wincmd p
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+map <Leader>n <plug>NERDTreeTabsToggle<CR>
+let g:nerdtree_tabs_open_on_console_startup=1
+" autocmd vimenter * NERDTree
+" autocmd VimEnter * wincmd p
+" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Highlight groups
 highlight BadWhitespace ctermbg=red guibg=red
