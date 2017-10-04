@@ -9,13 +9,13 @@
 PLUGINS       := gmarik/Vundle.vim ${PLUGINS}
 SECTIONS      := VUNDLE_SECTION ${SECTIONS}
 PACKAGES      := vundle $(PACKAGES)
-_VUNDLE_DIR   := $(_VIM_BUNDLE_DIR)/Vundle.vim
+VUNDLE_DIR   := $(_VIM_BUNDLE_DIR)/Vundle.vim
 
 define VUNDLE_SECTION
 " Vundle is a plugin manager for vim.
 " This is it's initialization section.
 
-set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=$(VUNDLE_DIR)
 call vundle#begin()
 
 $(foreach plugin,$(PLUGINS),Plugin '$(plugin)'$(NL))
@@ -24,17 +24,17 @@ call vundle#end()
 endef
 
 vundle.install: | $(_VIM_BUNDLE_DIR)
-	@if [ ! -d "$(_VUNDLE_DIR)" ]; then \
+	@if [ ! -d "$(VUNDLE_DIR)" ]; then \
 	  git clone https://github.com/VundleVim/Vundle.vim.git \
-		$(_VUNDLE_DIR); \
+		$(VUNDLE_DIR); \
 	else \
-	  cd $(_VUNDLE_DIR); \
+	  cd $(VUNDLE_DIR); \
 	  git pull; \
 	fi
 	@vim +PluginInstall +qall;
 	@$(ECHO) $(call msg_ok,Installed vundle for vim)
 
 vundle.uninstall:
-	rm -fr $(_VUNDLE_DIR) 
+	rm -fr $(VUNDLE_DIR) 
 
 vundle.check: ;
