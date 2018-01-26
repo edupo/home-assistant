@@ -30,3 +30,4 @@ $(GITCONFIG_FILE): Makefile
 	$(call git.config,user.email,user email)
 	$(call git.config,user.github,github user)
 	$(call git.config,user.company,company name)
+	$(call git.config,user.baseurl,url of your main git repository)

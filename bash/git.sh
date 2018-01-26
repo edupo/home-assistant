@@ -44,3 +44,8 @@ git_checkout() {
 
 	fi
 }
+git_clone(){
+  local BASEURL=$(git config --get user.baseurl)
+  echo "Cloning $BASEURL/$1.git"
+  git clone $BASEURL/$1.git
+}
