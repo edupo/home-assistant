@@ -17,6 +17,7 @@ git_checkremote() {
 		return 1
 	fi
 }
+
 # Checks out the first branch that contains the passed string in the name
 git_checkout() {
 	if [ ! -z $1 ]; then
@@ -44,8 +45,19 @@ git_checkout() {
 
 	fi
 }
+
+git_clone_github(){
+  local GHUSER=$(git config --get user.github)
+  local URL=https://github.com/$GHUSER/$1.git
+  git clone $URL
+}
+
 git_clone(){
   local BASEURL=$(git config --get user.baseurl)
-  echo "Cloning $BASEURL/$1.git"
-  git clone $BASEURL/$1.git
+  echo $BASEURL
+  if [ -z "$BASEURL" ]; then
+    git_clone_github $1
+  else
+    git clone $BASEURL/$1.git
+  fi
 }
