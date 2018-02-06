@@ -46,18 +46,35 @@ git_checkout() {
 	fi
 }
 
-git_clone_github(){
+# Clones a repository in the current folder from github.
+clono(){
+
   local GHUSER=$(git config --get user.github)
   local URL=https://github.com/$GHUSER/$1.git
+
   git clone $URL
+
 }
 
-git_clone(){
-  local BASEURL=$(git config --get user.baseurl)
-  echo $BASEURL
-  if [ -z "$BASEURL" ]; then
-    git_clone_github $1
+# Check if 'user.baseurl' is defined and clones from that host. If not proceed
+# with github.
+clon(){
+
+  if [ -z "$1" ]; then
+
+    echo -e "\nNo repository specified!\n\n\tusage: $1 <repository>"
+    echo -e "\nIf 'user.baseurl' is defined git will try to clone from that host else github will be used."
+    
   else
-    git clone $BASEURL/$1.git
+
+    local BASEURL=$(git config --get user.baseurl)
+    echo $BASEURL
+    if [ -z "$BASEURL" ]; then
+      clono $1
+    else
+      git clone $BASEURL/$1.git
+    fi
+
   fi
+
 }

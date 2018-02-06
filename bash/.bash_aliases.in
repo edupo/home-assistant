@@ -28,8 +28,6 @@ alias stas="git stash"
 alias binfo="git branch -vv"
 alias bclean="git branch --merged master | grep -v master | xargs -n 1 git branch -d"
 alias subm="git submodule update --init --recursive"
-alias clon=git_clone
-alias clono=git_clone_github
 
 # kitchen
 alias kv="kitchen verify"
