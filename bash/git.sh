@@ -1,58 +1,50 @@
-# Checks the remote if a remote exists and returns its name
-git_checkremote() {
-	REMOTE=""
-	if [ ! -z $1 ]; then
-		REMOTE=$(git remote | grep $1 -c)
-		if [ "$REMOTE" -eq 0 ]; then
-			echo "No remote found for the expression '$1'"
-			return 1
-		fi
-		if [ "$REMOTE" -gt 1 ]; then
-			echo "$REMOTE remotes found for the expression '$1'. Please, be concrete."
-			return 1
-		fi
-		REMOTE=$(git remote | grep $1) 
-		return 0
-	else
-		return 1
-	fi
-}
-
 # Checks out the first branch that contains the passed string in the name
 git_checkout() {
-	if [ ! -z $1 ]; then
 
-		if [ ! -z $2 ]; then
-			if git_checkremote "$2"; then
-				BRANCH=$(git branch -r --list *$REMOTE*$1* | sed -e 's/[\* ]*//;q')
-			else
-				return 1
-			fi
-		else
-			BRANCH=$(git branch -r --list *origin*$1* | sed -e 's/[\* ]*origin\///;q')
-		fi
+  # Arguments check
+  if [ -z $1 ]; then
+    echo -e "-- ERROR: No branch expression provided!" \
+     "\n\n\tusage: co <expression> [remote]\n\n" \
+     "\n\nco/checkout finds a git branch by expression and checks it out."
+    return
+  fi
 
-		if [ -z $BRANCH ]; then
-			echo "No branch found for expression '$1'"
-		else
-			echo "Found branch: '"$BRANCH"'" 
-			git checkout $BRANCH
-		fi
+  # Workout the variables
+  REMOTE=${2:-origin}
+  BRANCH=$(git branch -r --list *$REMOTE*$1* | sed -e 's/[\* ]*$REMOTE\///;q')
+  if [ -z $BRANCH ]; then
+      echo "-- ERROR: No branch found for expression '$1'"
+      return 1
+  fi
 
-	else
+  # At last the checkout.
+  echo "-- Found branch: '"$BRANCH"'" 
+  git checkout $BRANCH
 
-		printf "co/checkout finds a git branch by expression and check it out.\n\n\tusage: co <expression> [remote]\n\n"
+}
 
-	fi
+_find_dest(){
+
+  # Default clone destination is HOME but you can specify a subfolder if you
+  # want.
+  DEST=${DEST:-$HOME}
+  if [ -n "$1" ]; then
+    DEST=$DEST/$1
+  fi
+  if [ ! -d "$DEST" ]; then
+    mkdir -p $DEST
+    echo -e "-- Creating '$DEST'"
+  fi
+
 }
 
 # Clones a repository in the current folder from github.
 clono(){
 
-  local GHUSER=$(git config --get user.github)
-  local URL=https://github.com/$GHUSER/$1.git
+  local URL=https://github.com/$(git config --get user.github)/$1.git
 
-  git clone $URL
+  _find_dest $2
+  git -C $DEST clone $URL
 
 }
 
@@ -60,21 +52,25 @@ clono(){
 # with github.
 clon(){
 
+  # Checking for the repository argument
   if [ -z "$1" ]; then
-
-    echo -e "\nNo repository specified!\n\n\tusage: $1 <repository>"
-    echo -e "\nIf 'user.baseurl' is defined git will try to clone from that host else github will be used."
-    
-  else
-
-    local BASEURL=$(git config --get user.baseurl)
-    echo $BASEURL
-    if [ -z "$BASEURL" ]; then
-      clono $1
-    else
-      git clone $BASEURL/$1.git
-    fi
-
+    echo -e "-- ERROR: No repository specified!" \
+      "\n\n\tusage: $1 <repository> [workspace]" \
+      "\n\nIf 'user.baseurl' is defined in 'git.config' then $0 will try to " \
+      " clone from that host else github will be used."
+    return 
   fi
+
+  local HOST=$(git config --get user.baseurl)
+
+  # Fallback to github if no 'user.baseurl' defined.
+  if [ -z "$HOST" ]; then
+    clono $1 $2
+    return
+  fi
+
+  # Actual clone from defined host.
+  _find_dest $2
+  git -C $DEST clone $HOST/$1.git
 
 }
