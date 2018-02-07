@@ -28,18 +28,21 @@ co() {
 
 export WORKSPACE=${WORKSPACE:-$HOME}
 
+# Find a suitable destination for cloning. If a path is passed it creates the
+# folder under you home.
 _find_dest(){
 
   # Default clone destination is HOME but you can specify a subfolder if you
   # want.
-  DEST=${DEST:-$HOME}
+  local DEST=$HOME
   if [ -n "$1" ]; then
-    DEST=$DEST/$1
+    local DEST=$HOME/$1
   fi
   if [ ! -d "$DEST" ]; then
-    mkdir -p $DEST
     echo -e "-- Creating '$DEST'"
+    mkdir -p $DEST
   fi
+  echo "$DEST"
 
 }
 
@@ -47,8 +50,8 @@ _find_dest(){
 clono(){
 
   local URL=https://github.com/$(git config --get user.github)/$1.git
+  local DEST=$(_find_dest $2)
 
-  _find_dest $2
   git -C $DEST clone $URL
 
 }
@@ -75,7 +78,7 @@ clon(){
   fi
 
   # Actual clone from defined host.
-  _find_dest $2
+  local DEST=$(_find_dest $2)
   git -C $DEST clone $HOST/$1.git
 
 }
