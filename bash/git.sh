@@ -1,7 +1,7 @@
 # Checks out the first branch that contains the passed string in the name
-git_checkout() {
-
-  # Arguments check
+co() {
+  
+  # Check arguments
   if [ -z $1 ]; then
     echo -e "-- ERROR: No branch expression provided!" \
      "\n\n\tusage: co <expression> [remote]\n\n" \
@@ -9,19 +9,24 @@ git_checkout() {
     return
   fi
 
-  # Workout the variables
-  REMOTE=${2:-origin}
-  BRANCH=$(git branch -r --list *$REMOTE*$1* | sed -e 's/[\* ]*$REMOTE\///;q')
+  # Find the branch
+  if [ -z $2 ]; then
+    BRANCH=$(git branch --list *$1* | sed -e 's/^[\* ]*//;q')
+  else
+    BRANCH=$(git branch -r --list *$2*$1* | sed -e 's/[\* ]*//;q')
+  fi
   if [ -z $BRANCH ]; then
-      echo "-- ERROR: No branch found for expression '$1'"
-      return 1
+    echo "-- No branch found for expression '$1'"
+    return
   fi
 
-  # At last the checkout.
-  echo "-- Found branch: '"$BRANCH"'" 
+  # Finally the checkout
+  echo "-- Found branch: '$BRANCH'" 
   git checkout $BRANCH
 
 }
+
+export WORKSPACE=${WORKSPACE:-$HOME}
 
 _find_dest(){
 
