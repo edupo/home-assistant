@@ -68,3 +68,13 @@ alias pre="style *.cpp *.h"
 
 # python
 alias py="python"
+
+# openssl
+getcert(){
+  if [ -z "$1" ]; then
+    echo -e "usage:\n\n\tgetcert <HOST> [PORT]\n"
+  else 
+    local PORT=${2:-443}
+    openssl s_client -connect $1:$PORT -showcerts
+  fi
+}
