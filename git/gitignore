@@ -8,6 +8,7 @@
 # Python garbage
 __pycache__/
 *.py[cod]
+venv
 
 # Folders
 bin/
@@ -30,3 +31,7 @@ Berksfile.lock
 CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake
+
+# Binary files
+*.db
+
