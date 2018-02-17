@@ -78,3 +78,7 @@ getcert(){
     openssl s_client -connect $1:$PORT -showcerts
   fi
 }
+
+# system
+
+alias ports="netstat -tulpn"
