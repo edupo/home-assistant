@@ -29,7 +29,7 @@ _HELP_FILE      := $(_VIM_FTPLUG_DIR)/help.vim
 
 # Components are the files which will generate the final rc file.
 # Note Vundle is always added the last.
-COMPONENTS      := ultisnips.mk python.mk ycm.mk
+COMPONENTS      := ultisnips.mk python.mk
 COMPONENTS      += vundle.mk
 
 PLUGINS         := scrooloose/nerdcommenter scrooloose/syntastic \
@@ -48,9 +48,3 @@ VAR_LIST += BODY
 
 ### Specific rules ###
 $(_VIMRC_FILE): $(COMPONENTS) 
-
-vim.install:
-	@if [ ! "$(VIM_VERSION)" = "$(VIM_TARGET_VERSION)" ]; then \
-      sh vim$(VIM_TARGET_VERSION)_ubuntu_build.sh; \
-    fi
-	@$(ECHO) $(call msg_ok,'$(basename $@)' is installed); \

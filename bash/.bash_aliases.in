@@ -8,9 +8,10 @@
 alias s="git status"
 alias c="git commit -m"
 alias ca="git commit -a -m"
-alias amend="git commit --amend"
+alias amend="git commit --amend --no-edit"
 alias aa="git add -A"
 alias au="git add -u"
+alias ap="git add -u; git commit --amend --no-edit; git push -f"
 alias push="git push"
 alias pus="git push"
 alias pull="git pull"
@@ -82,3 +83,12 @@ getcert(){
 # system
 
 alias ports="netstat -tulpn"
+alias shred="shred -vzun 10"
+alias shredir="find . -type f -exec shred -vzun 10 {} \;"
+
+# ssh
+ssh_clean(){
+  ssh-keygen -f "$HOME/.ssh/known_hosts" -R $1
+  ssh $1
+}
+alias sshc="ssh_clean"

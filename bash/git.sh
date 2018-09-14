@@ -34,7 +34,7 @@ _find_dest(){
 
   # Default clone destination is HOME but you can specify a subfolder if you
   # want.
-  local DEST=$HOME
+  local DEST=$HOME/ws
   if [ -n "$1" ]; then
     local DEST=$HOME/$1
   fi
@@ -79,6 +79,6 @@ clon(){
 
   # Actual clone from defined host.
   local DEST=$(_find_dest $2)
-  git -C $DEST clone $HOST/$1.git
+  git -C $DEST clone --recursive $HOST/$1.git
 
 }
