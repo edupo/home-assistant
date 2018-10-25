@@ -32,6 +32,7 @@ _HOME_FILES := $(filter-out $(_SYSTEM_FILES), $(FILES))
 	  $(ECHO) $(call msg_ok,'$(basename $@)' is already installed); \
 	fi
 
+ifndef _NO_PKGMAN
 %.install:
 	@if [ -z "`$(call sys.check,$(basename $@))`" ]; then \
 	  $(call sys.install,$(basename $@)); \
@@ -47,6 +48,7 @@ _HOME_FILES := $(filter-out $(_SYSTEM_FILES), $(FILES))
 	else \
 	  $(ECHO) $(call msg_ok,'$(basename $@)' is not installed); \
 	fi
+endif
 
 %.check:
 	@if [ -z "`$(call sys.check,$(basename $@))`" -a \
@@ -73,7 +75,7 @@ $(_SYSTEM_DIRS): | sudo.check
 # Main targets rules
 .PHONY: config clean install uninstall
 
-config: $(addsuffix .check, $(PACKAGES)) $(DIRS) $(FILES)
+config:  pre_config $(addsuffix .check, $(PACKAGES)) $(DIRS) $(FILES)
 
 clean:
 	@$(ECHO) "$(rd)This action will remove files: \

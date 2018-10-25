@@ -26,6 +26,7 @@ $(GITCONFIG_FILE): Makefile
 	$(GCFG) push.default simple
 	$(GCFG) credential.helper cache
 	$(GCFG) credential.helper 'cache --timeout=3600'
+	$(GCFG) core.autocrlf true
 	$(call git.config,user.name,complete user name)
 	$(call git.config,user.email,user email)
 	$(call git.config,user.github,github user)

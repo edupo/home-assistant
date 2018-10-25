@@ -30,23 +30,45 @@ endef
 pathsearch = $(firstword $(wildcard $(addsuffix /$(1), $(subst :, ,$(PATH)))))
 
 # Automatic installation stuff 
-# TODO: more reliable system to detect OS ex.: uname
-ifneq ($(call pathsearch,apt-get),)
+
+ifneq "$(call pathsearch,mkdir)" ""
   sys.mkdir     = mkdir -p $(1)
+else
+  $(error Your system does not have 'mkdir'.)
+endif
+
+ifneq "$(call pathsearch,envsubst)" ""
   sys.envsubst  = envsubst '$(VAR_LIST:%=$${%})' <$(1) >$(2)
-  sys.check     = dpkg --status $(1) $(MUTE_STDERR) | grep installed
+else
+  $(error Your system does not have 'envsubst'.)
+endif
+
+ifneq "$(call pathsearch,which)" ""
   sys.check2    = which $(1)
+else
+  $(error Your system does not have 'which'.)
+endif
+
+ifneq "$(call pathsearch,sudo)" ""
+  sys.sudo      = sudo
+else
+  sys.sudo      =
+endif
+
+ifneq ($(call pathsearch,apt-get),)
+  sys.check     = dpkg --status $(1) $(MUTE_STDERR) | grep installed
   sys.install   = sudo apt-get install $(if $(UNATTENDED),-y) $(1)
   sys.uninstall = sudo apt-get remove $(if $(UNATTENDED),-y) $(1)
   pip.install   = sudo pip install $(1)
 else
-  $(error Your system is not compatible with these makefiles.) 
+  $(warning No package manager has been found. You can not install with this assistant)
+  export _NO_PKGMAN=
 endif
 
 # Canned recipes
 define cr.chown
-$(if $(USER),sudo chown $(USER) $@)
-$(if $(GROUP),sudo chown :$(GROUP) $@)
+$(if $(USER),$(sys.sudo) chown $(USER) $@)
+$(if $(GROUP),$(sys.sudo) chown :$(GROUP) $@)
 endef
 
 define cr.mkdir
@@ -56,7 +78,7 @@ $(cr.chown)
 endef
 
 define cr.sudo.mkdir
-sudo $(call sys.mkdir,$@)
+$(sys.sudo) $(call sys.mkdir,$@)
 $(cr.chown)
 @$(ECHO) $(call msg_ok,Directory '$@')
 endef
@@ -69,10 +91,13 @@ endef
 
 define cr.sudo.envsubst
 $(call sys.envsubst,$<,.$(subst .in,.out,$<))
-sudo cp .$(subst .in,.out,$<) $@
+$(sys.sudo) cp .$(subst .in,.out,$<) $@
 $(cr.chown)
 @$(ECHO) $(call msg_ok,'$<' -> '$@')
 endef
 
+# Targets
+
+pre_config: ;
 
 __PRE_VAR_MK := 1

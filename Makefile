@@ -10,7 +10,13 @@ include ./utils/pre-var.mk
 ### Variables ###
 export HOME?=$(shell echo $HOME)
 
-_VALID_MAIN_GOALS = install config clean uninstall clean.all
+# Valid main goals depends on the availability of some tools.
+# Like to perform install you may depend on a package manager.
+_VALID_MAIN_GOALS = config clean clean.all
+ifndef _NO_PKGMAN
+_VALID_MAIN_GOALS += install uninstall
+endif
+
 _MAIN_GOALS := $(or $(filter $(_VALID_MAIN_GOALS),$(MAKECMDGOALS)),"config")
 MAKECMDGOALS := $(filter-out $(_VALID_MAIN_GOALS),$(MAKECMDGOALS))
 

@@ -18,4 +18,8 @@ export FILESEARCH_SCRIPT_FILE := $(abspath file_search.sh)
 # Substitution variables list
 VAR_LIST = GIT_SCRIPT_FILE FILESEARCH_SCRIPT_FILE PROMPT_SCRIPT_FILE
 
+pre_config: uname.check
+	cp .bashrc.$(shell uname -o).in .bashrc.in
+
+
 include ../utils/post-var.mk
