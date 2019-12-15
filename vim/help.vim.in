@@ -1,5 +1,5 @@
 " Simplifying help navigation (from vim wiki)
-" Enter to jup to the subject
+" Enter to jump to the subject
 " Backspace to return from the last jump
 " s/S subject navigation
 " o/O option navigation

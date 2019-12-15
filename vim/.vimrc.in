@@ -12,6 +12,54 @@ set textwidth=80
 
 filetype off
 
+" PLUGINS
+call plug#begin('~/.vim/plugged')
+Plug 'scrooloose/nerdtree'
+
+Plug 'scrooloose/nerdcommenter'
+" Syntax checker
+Plug 'scrooloose/syntastic'
+
+" File finder
+Plug 'ctrlpvim/ctrlp.vim'
+
+" Python
+Plug 'tmhedberg/SimpylFold'
+Plug 'vim-scripts/indentpython.vim'
+Plug 'nvie/vim-flake8'
+Plug 'tell-k/vim-autopep8'
+
+" Snippets
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+call plug#end()
+
+
+" Handy strip function
+function! Strip(input_string)
+         return substitute(a:input_string, '^\s*\(.\{-}\)[\s\n]*$', '\1', '')
+         endfunction
+
+" Ultisnips needs rtp directed to the paret of the snippets folder.
+set rtp+=${SNIPS_PARENT_DIR}
+
+" Snippets directory
+let g:UltiSnipsSnippetsDir="${SNIPS_PARENT_DIR}/UltiSnips"
+
+" Snippets variables
+let g:snips_author=Strip(system('git config --global --get user.name'))
+let g:snips_email=Strip(system('git config --global --get user.email'))
+let g:snips_github=Strip(system('git config --global --get user.github'))
+let g:snips_company=Strip(system('git config --global --get user.company'))
+
+let g:UltiSnipsExpandTrigger="<tab>"
+"let g:UltiSnipsListSnippets="<c-b>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" :UltiSnipsEdit command splits current window
+let g:UltiSnipsEditSplit="vertical"
+
 " NERD tree
 map <C-n> :NERDTreeToggle<CR>
 map <Leader>n <plug>NERDTreeTabsToggle<CR>
@@ -28,12 +76,20 @@ highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 match OverLength /\%81v.\+/
 set colorcolumn=81
 
-" Handy strip function
-function! Strip(input_string)
-        return substitute(a:input_string, '^\s*\(.\{-}\)[\s\n]*$', '\1', '')
-endfunction
-
-${BODY}
+" Python
+let g:ycm_python_binary_path = 'python3'
+au FileType python set autoindent
+au BufRead,BufNewFile *.py,*.pyw
+		\ set tabstop=4 |
+		\ set shiftwidth=4 | 
+		\ set expandtab |
+		\ match BadWhitespace /^\t\+/ |
+		\ match BadWhitespace /\s\+$$/ |
+		\ set textwidth=100 |
+		\ set fileformat=unix |
+au BufRead,BufNewFile *.py 
+		\ set softtabstop=4
+let python_highlight_all=1
 
 " Enable folding
 set foldmethod=indent

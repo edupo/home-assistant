@@ -1,50 +1,23 @@
 #!/usr/bin/make
 #
-# Vim main assistant makefile.
-# As configuration for vim is not tribial (depends on how much do you like it)
-# The assistant makefiles are splitted in components. Every component adds 
-# information 
-#
 # Created on: 08.11.16
 
-include ../utils/pre-var.mk
-### Variables ###
+export SNIPS_PARENT_DIR = $(shell pwd)
+ENVSUBST_VAR += SNIPS_PARENT_DIR
+SHELL_FORMAT = $(ENVSUBST_VAR:%=$${%})
 
-# vim
-export VIM_TARGET_VERSION := 8.0
-export VIM_BIN            := $(shell which vim)
-ifneq ($(VIM_BIN),)
-  export VIM_VERSION      := $(shell vim --version | sed '/IMproved/!d' | \
-                               sed 's/^.*IMproved \([0-9]*\.[0-9]*\) .*$$/\1/')
-endif
+.PHONY: config install clean
 
-# Directories
-_VIM_USER_DIR   := $(HOME)/.vim
-_VIM_BUNDLE_DIR := $(_VIM_USER_DIR)/bundle
-_VIM_FTPLUG_DIR := $(HOME)/.vim/ftplugin
+config: install $(HOME)/.vim/autoload/plug.vim
+	@echo "-- Configuring vim"
+	envsubst '$(SHELL_FORMAT)' <.vimrc.in >.vimrc
+	install -m 600 .vimrc $(HOME)
 
-# File
-_VIMRC_FILE     := $(HOME)/.vimrc
-_HELP_FILE      := $(_VIM_FTPLUG_DIR)/help.vim
+install:
+	@echo "-- Install vim requirements"
+	sudo apt install vim curl
 
-# Components are the files which will generate the final rc file.
-# Note Vundle is always added the last.
-COMPONENTS      := ultisnips.mk python.mk
-COMPONENTS      += vundle.mk
+$(HOME)/.vim/autoload/plug.vim:
+	curl -fLo $@ --create-dirs \
+		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-PLUGINS         := scrooloose/nerdcommenter scrooloose/syntastic \
-                   scrooloose/nerdtree tpope/vim-jdaddy ngmy/vim-rubocop \
-                   ctrlpvim/ctrlp.vim jistr/vim-nerdtree-tabs
-
-include $(COMPONENTS)
-PACKAGES := vim $(PACKAGES)
-
-include ../utils/post-var.mk
-
-# vimrc body generation
-export BODY = $(foreach section,$(SECTIONS)\
-    ,"--- $(section) ---"$(NL)$(NL)$($(section))$(NL)$(NL))
-VAR_LIST += BODY
-
-### Specific rules ###
-$(_VIMRC_FILE): $(COMPONENTS) 
