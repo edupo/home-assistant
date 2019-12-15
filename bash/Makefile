@@ -12,13 +12,15 @@ SHELL_FORMAT = $(ENVSUBST_VAR:%=$${%})
 
 .PHONY: config install clean
 
-config: install
+config:
+	@echo "-- Configuring bash"
 	envsubst '$(SHELL_FORMAT)' <.bash_aliases.in >.bash_aliases
 	envsubst '$(SHELL_FORMAT)' <.bashrc.in >.bashrc
-	install -m 644 .bash_aliases $(HOME)/.bash_aliases
-	install -m 744 .bashrc $(HOME)/.bashrc
+	install -m 600 .bash_aliases $(HOME)
+	install -m 700 .bashrc $(HOME)
 
 install:
+	@echo "-- Installing bash requisites"
 	sudo apt install gettext
 
 clean:
