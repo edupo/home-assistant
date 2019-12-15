@@ -4,10 +4,16 @@
 #
 # Created on: 04.11.16
 
-include ../utils/pre-var.mk
+.PHONY: config install clean
 
-### Variables ###
-_TMUX_CONF_FILE :=$(HOME)/.tmux.conf
-PACKAGES        += tmux xclip
+config: install
+	@echo "-- Configuring tmux"
+	install -m 600 .tmux.conf $(HOME)
 
-include ../utils/post-var.mk
+install:
+	@echo "-- Installing tmux requisites"
+	sudo apt install tmux xclip
+
+clean:
+	rm .tmux.conf
+
