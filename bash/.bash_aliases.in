@@ -1,5 +1,5 @@
-. ${FILESEARCH_SCRIPT_FILE} 
-. ${GIT_SCRIPT_FILE}
+. ${FILE_SCRIPT_FILESEARCH} 
+. ${FILE_SCRIPT_GIT}
 
 # Super-lazy aliases #
 ######################

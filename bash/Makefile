@@ -1,25 +1,27 @@
 #!/usr/bin/make
 #
-# Assistence makefile for bash
+# Configure the shell
 #
-# Created on: 04.11.16
+# Created on 15.12.2019
 
-include ../utils/pre-var.mk
+export FILE_SCRIPT_PROMPT          := $(abspath bash/prompt.sh)
+export FILE_SCRIPT_GIT             := $(abspath bash/git.sh)
+export FILE_SCRIPT_FILESEARCH      := $(abspath file_search.sh) 
+ENVSUBST_VAR += FILE_SCRIPT_PROMPT FILE_SCRIPT_GIT FILE_SCRIPT_FILESEARCH
+SHELL_FORMAT = $(ENVSUBST_VAR:%=$${%})
 
-### Variables ###
-# Files
-_ALIAS_FILE                   := $(HOME)/.bash_aliases
-_BASHRC_FILE                  := $(HOME)/.bashrc
+.PHONY: config install clean
 
-export PROMPT_SCRIPT_FILE     := $(abspath prompt.sh)
-export GIT_SCRIPT_FILE        := $(abspath git.sh)
-export FILESEARCH_SCRIPT_FILE := $(abspath file_search.sh)
+config: install
+	envsubst '$(SHELL_FORMAT)' <.bash_aliases.in >.bash_aliases
+	envsubst '$(SHELL_FORMAT)' <.bashrc.in >.bashrc
+	install -m 644 .bash_aliases $(HOME)/.bash_aliases
+	install -m 744 .bashrc $(HOME)/.bashrc
 
-# Substitution variables list
-VAR_LIST = GIT_SCRIPT_FILE FILESEARCH_SCRIPT_FILE PROMPT_SCRIPT_FILE
+install:
+	sudo apt install gettext
 
-pre_config: uname.check
-	cp .bashrc.$(shell uname -o).in .bashrc.in
+clean:
+	rm .bash_aliases .bashrc
+	
 
-
-include ../utils/post-var.mk
