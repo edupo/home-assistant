@@ -1,137 +1,159 @@
 " Default settings
 syntax on
 set number
-set encoding=utf-8
 set nocompatible
-set clipboard=unnamed
-set backspace=indent,eol,start
 set expandtab
-set tabstop=4
-set shiftwidth=2
-set textwidth=80
+set encoding   =utf-8
+set clipboard  =unnamed
+set backspace  =indent,eol,start
+set tabstop    =4
+set shiftwidth =2
+set textwidth  =80
 
-filetype off
 
-" PLUGINS
+""""" Custom mapping
+" Navigate panes
+nnoremap <C-j> <C-w><C-j>
+nnoremap <C-k> <C-w><C-k>
+nnoremap <C-l> <C-w><C-l>
+nnoremap <Leader>h <C-w><C-h>
+" Expand brackets
+inoremap (     ()<Esc>i
+inoremap {     {}<Esc>i
+inoremap [     []<Esc>i
+
+
+""""" PLUGINS
 call plug#begin('~/.vim/plugged')
-Plug 'scrooloose/nerdtree'
 
-Plug 'scrooloose/nerdcommenter'
-" Syntax checker
-Plug 'scrooloose/syntastic'
+" NERD tree
+Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
+let NERDTreeHijackNetrw = 0
+noremap <silent> <Leader>n :NERDTreeToggle<CR> <C-w>=
+noremap <silent> <Leader>nf :NERDTreeFind<CR> <C-w>=
 
-" File finder
-Plug 'ctrlpvim/ctrlp.vim'
+" Align all lines around a character ("gl=" will do it around =)
+Plug 'tommcdo/vim-lion'
+let g:lion_squeeze_spaces = 1
 
-" Python
-Plug 'tmhedberg/SimpylFold'
-Plug 'vim-scripts/indentpython.vim'
-Plug 'nvie/vim-flake8'
-Plug 'tell-k/vim-autopep8'
+" Additional text objects
+Plug 'wellle/targets.vim'
+Plug 'michaeljsmith/vim-indent-object'
+
+" Use 'f' and 't' to move between matches
+Plug 'rhysd/clever-f.vim'
+let g:clever_f_across_no_line    = 1
+let g:clever_f_fix_key_direction = 1
+let g:clever_f_timeout_ms        = 3000
+
+" File fuzzy finder
+Plug 'tpope/vim-fugitive'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --no-bash' }
+Plug 'junegunn/fzf.vim'
+Plug 'pbogut/fzf-mru.vim'
+let g:fzf_commits_log_options = '--graph --color=always
+  \ --format="%C(yellow)%h%C(red)%d%C(reset)
+  \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
+" Next maps allows to find files in different dimensions and open them for edit.
+nnoremap <silent> <Leader>p :Files<CR> "Project structure
+nnoremap <silent> <Leader>b :Buffers<CR> "Open Buffers
+nnoremap <silent> <Leader>g :GFiles? "Git files
+nnoremap <silent> <Leader>]  :Tags<CR> "Project's Tags
+nnoremap <silent> <Leader>b] :BTags<CR> "Buffer's Tags
+nnoremap <silent> <Leader>c  :Commits<CR> "Project's Commits
+nnoremap <silent> <Leader>bc :BCommits<CR> "Buffer's Commits
+nnoremap <silent> <Leader>m :FZFMru<CR> "Most recent used files
+
+" Auto completion
+Plug 'natebosch/vim-lsc'
+Plug 'ajh17/VimCompletesMe'
+let g:lsc_auto_map             = v:true
+let g:lsc_enable_autocomplete  = v:true
+let g:lsc_enable_diagnostics   = v:false
+let g:lsc_reference_highlights = v:false
+let g:lsc_trace_level          = 'off'
+let g:lsc_server_commands      = { 'python' : 'pyls'}
+autocmd FileType vim let b:vcm_tab_complete = 'vim'
+"autocmd FileType python let b:vcm_tab_complete = "omni"
 
 " Snippets
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+let g:UltiSnipsExpandTrigger       = "<C-j>"
+let g:UltiSnipsJumpForwardTrigger  = "<C-j>"
+let g:UltiSnipsJumpBackwardTrigger = "<C-k>"
+inoremap <silent> <C-j> <C-r>=LoadUltiSnipsAndExpand()<CR>
+function! LoadUltiSnipsAndExpand()
+    let l:curpos = getcurpos()
+    execute plug#load('ultisnips')
+    call cursor(l:curpos[1], l:curpos[2])
+    call UltiSnips#ExpandSnippet()
+    return ""
+endfunction
+
+" Indentation help
+Plug 'Yggdroot/indentLine'
+let g:indentLine_faster     = 1
+let g:indentLine_setConceal = 0
+
+" Language packs
+Plug 'sheerun/vim-polyglot'
+
+" Linting and fixing tools
+Plug 'w0rp/ale'
+let g:ale_fixers = {
+      \  'css':        ['prettier'],
+      \  'javascript': ['prettier-standard'],
+      \  'json':       ['prettier'],
+      \  'ruby':       ['standardrb'],
+      \  'scss':       ['prettier'],
+      \  'yml':        ['prettier'],
+      \  'python':     ['pylint'],
+      \}
+let g:ale_linters = {
+      \  'css':        ['csslint'],
+      \  'javascript': ['standard'],
+      \  'json':       ['jsonlint'],
+      \  'ruby':       ['standardrb'],
+      \  'scss':       ['sasslint'],
+      \  'yaml':       ['yamllint'],
+      \  'python':     ['pylint'],
+      \}
+let g:ale_lint_on_enter            = 0
+let g:ale_lint_on_filetype_changed = 0
+let g:ale_lint_on_insert_leave     = 0
+let g:ale_lint_on_save             = 0
+let g:ale_lint_on_text_changed     = 'never'
+nmap <Leader>l    <Plug>(ale_lint)
+nmap <Leader>f    <Plug>(ale_fix)
+nmap <Leader><BS> <Plug>(ale_reset_buffer)
+
+" Git indicators
+Plug 'airblade/vim-gitgutter'
+"let g:gitgutter_grep                    = 'rg'
+let g:gitgutter_map_keys                = 0
+let g:gitgutter_sign_added              = '▎'
+let g:gitgutter_sign_modified           = '▎'
+let g:gitgutter_sign_modified_removed   = '▶'
+let g:gitgutter_sign_removed            = '▶'
+let g:gitgutter_sign_removed_first_line = '◥'
+nmap [g <Plug>GitGutterPrevHunkzz
+nmap ]g <Plug>GitGutterNextHunkzz
+nmap <Leader>p <Plug>GitGutterPreviewHunk
+nmap <Leader>+ <Plug>GitGutterStageHunk
+nmap <Leader>- <Plug>GitGutterUndoHunk]
+
+Plug '907th/vim-auto-save'
+let g:auto_save        = 1
+let g:auto_save_silent = 1
+let g:auto_save_events = ["InsertLeave", "TextChanged", "FocusLost"]
+
+" Commenting lines with 'gc'
+Plug 'tpope/vim-commentary'
+" Automatic indent configuration
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-unimpaired'
+
 call plug#end()
-
-
-" Handy strip function
-function! Strip(input_string)
-         return substitute(a:input_string, '^\s*\(.\{-}\)[\s\n]*$', '\1', '')
-         endfunction
-
-" Ultisnips needs rtp directed to the paret of the snippets folder.
-set rtp+=${SNIPS_PARENT_DIR}
-
-" Snippets directory
-let g:UltiSnipsSnippetsDir="${SNIPS_PARENT_DIR}/UltiSnips"
-
-" Snippets variables
-let g:snips_author=Strip(system('git config --global --get user.name'))
-let g:snips_email=Strip(system('git config --global --get user.email'))
-let g:snips_github=Strip(system('git config --global --get user.github'))
-let g:snips_company=Strip(system('git config --global --get user.company'))
-
-let g:UltiSnipsExpandTrigger="<tab>"
-"let g:UltiSnipsListSnippets="<c-b>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
-" :UltiSnipsEdit command splits current window
-let g:UltiSnipsEditSplit="vertical"
-
-" NERD tree
-map <C-n> :NERDTreeToggle<CR>
-map <Leader>n <plug>NERDTreeTabsToggle<CR>
-let g:nerdtree_tabs_open_on_console_startup=1
-" autocmd vimenter * NERDTree
-" autocmd VimEnter * wincmd p
-" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" Highlight groups
-highlight BadWhitespace ctermbg=red guibg=red
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-
-" Matching over legth
-match OverLength /\%81v.\+/
-set colorcolumn=81
-
-" Python
-let g:ycm_python_binary_path = 'python3'
-au FileType python set autoindent
-au BufRead,BufNewFile *.py,*.pyw
-		\ set tabstop=4 |
-		\ set shiftwidth=4 | 
-		\ set expandtab |
-		\ match BadWhitespace /^\t\+/ |
-		\ match BadWhitespace /\s\+$$/ |
-		\ set textwidth=100 |
-		\ set fileformat=unix |
-au BufRead,BufNewFile *.py 
-		\ set softtabstop=4
-let python_highlight_all=1
-
-" Enable folding
-set foldmethod=indent
-set foldlevel=99
-nnoremap <space> za
-let g:SimplyFold_docstring_preview=1
-
-" Remap pane movement
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
-
-" Remap parenthesis expansion
-inoremap (     ()<Esc>i
-inoremap {     {}<Esc>i
-inoremap [     []<Esc>i
-inoremap <     <><Esc>i
-inoremap "     ""<Esc>i
-inoremap '     ''<Esc>i
-
-" Jenkinsfile
-au BufRead,BufNewFile Jenkinsfile,Jenkinsfile.*
-        \ setf groovy |
-        \ set tabstop=2 |
-		\ set shiftwidth=2 | 
-		\ set expandtab |
-        \ set smartindent |
-  		\ match BadWhitespace /^\t\+/ |
-		\ match BadWhitespace /\s\+$/ |
-		\ set fileformat=unix
-
-" C
-au BufRead,BufNewFile *.c,*.h
-    \ set tabstop=4 |
-		\ match BadWhitespace /\s\+$/ |
-		\ set fileformat=unix
-
-" Web indentation
-au BufNewFile,BufRead *.js, *.html, *.css
-		\ set tabstop=2 |
-		\ set softtabstop=2 |
-		\ set shiftwidth=2
-
-filetype plugin indent on 	" required
