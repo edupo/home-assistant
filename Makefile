@@ -26,9 +26,9 @@ endef
 ################################################################################
 
 # Bash
-export FILE_SCRIPT_PROMPT     := $(abspath prompt.sh)
-export FILE_SCRIPT_GIT        := $(abspath git.sh)
-export FILE_SCRIPT_FILESEARCH := $(abspath file_search.sh) 
+export FILE_SCRIPT_PROMPT     := $(abspath bash/prompt.sh)
+export FILE_SCRIPT_GIT        := $(abspath bash/git.sh)
+export FILE_SCRIPT_FILESEARCH := $(abspath bash/file_search.sh) 
 SHELL_FILES                   := $(HOME)/.bash_aliases $(HOME)/.bashrc
 SHELL_VARS                    := FILE_SCRIPT_PROMPT FILE_SCRIPT_GIT \
                                  FILE_SCRIPT_FILESEARCH
