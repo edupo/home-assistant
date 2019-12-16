@@ -11,13 +11,32 @@ set shiftwidth =2
 set textwidth  =80
 
 
-""""" Custom mapping
-" Navigate panes
-nnoremap <C-j> <C-w><C-j>
-nnoremap <C-k> <C-w><C-k>
-nnoremap <C-l> <C-w><C-l>
+""""" MAPPINGS
+let mapleader = " "
+
+nnoremap <Leader>j <C-w><C-j> " Pane navigation
+nnoremap <Leader>k <C-w><C-k>
+nnoremap <Leader>l <C-w><C-l>
 nnoremap <Leader>h <C-w><C-h>
-" Expand brackets
+nnoremap <silent> <Leader>n :NERDTreeToggle<CR> <C-w>=
+nnoremap <silent> <Leader>nf :NERDTreeFind<CR> <C-w>=
+nnoremap <silent> <Leader>p :Files<CR> "Project structure
+nnoremap <silent> <Leader>b :Buffers<CR> "Open Buffers
+nnoremap <silent> <Leader>g :GFiles? "Git files
+nnoremap <silent> <Leader>]  :Tags<CR> "Project's Tags
+nnoremap <silent> <Leader>b] :BTags<CR> "Buffer's Tags
+nnoremap <silent> <Leader>c  :Commits<CR> "Project's Commits
+nnoremap <silent> <Leader>bc :BCommits<CR> "Buffer's Commits
+nnoremap <silent> <Leader>m :FZFMru<CR> "Most recent used files
+nnoremap <Leader>l    <Plug>(ale_lint)
+nnoremap <Leader>f    <Plug>(ale_fix)
+nnoremap <Leader><BS> <Plug>(ale_reset_buffer)
+nnoremap [g <Plug>GitGutterPrevHunkzz
+nnoremap ]g <Plug>GitGutterNextHunkzz
+nnoremap <Leader>p <Plug>GitGutterPreviewHunk
+nnoremap <Leader>+ <Plug>GitGutterStageHunk
+nnoremap <Leader>- <Plug>GitGutterUndoHunk]
+inoremap <silent> <C-j> <C-r>=LoadUltiSnipsAndExpand()<CR>
 inoremap (     ()<Esc>i
 inoremap {     {}<Esc>i
 inoremap [     []<Esc>i
@@ -29,8 +48,6 @@ call plug#begin('~/.vim/plugged')
 " NERD tree
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
 let NERDTreeHijackNetrw = 0
-noremap <silent> <Leader>n :NERDTreeToggle<CR> <C-w>=
-noremap <silent> <Leader>nf :NERDTreeFind<CR> <C-w>=
 
 " Align all lines around a character ("gl=" will do it around =)
 Plug 'tommcdo/vim-lion'
@@ -55,14 +72,6 @@ let g:fzf_commits_log_options = '--graph --color=always
   \ --format="%C(yellow)%h%C(red)%d%C(reset)
   \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
 " Next maps allows to find files in different dimensions and open them for edit.
-nnoremap <silent> <Leader>p :Files<CR> "Project structure
-nnoremap <silent> <Leader>b :Buffers<CR> "Open Buffers
-nnoremap <silent> <Leader>g :GFiles? "Git files
-nnoremap <silent> <Leader>]  :Tags<CR> "Project's Tags
-nnoremap <silent> <Leader>b] :BTags<CR> "Buffer's Tags
-nnoremap <silent> <Leader>c  :Commits<CR> "Project's Commits
-nnoremap <silent> <Leader>bc :BCommits<CR> "Buffer's Commits
-nnoremap <silent> <Leader>m :FZFMru<CR> "Most recent used files
 
 " Auto completion
 Plug 'natebosch/vim-lsc'
@@ -82,7 +91,6 @@ Plug 'honza/vim-snippets'
 let g:UltiSnipsExpandTrigger       = "<C-j>"
 let g:UltiSnipsJumpForwardTrigger  = "<C-j>"
 let g:UltiSnipsJumpBackwardTrigger = "<C-k>"
-inoremap <silent> <C-j> <C-r>=LoadUltiSnipsAndExpand()<CR>
 function! LoadUltiSnipsAndExpand()
     let l:curpos = getcurpos()
     execute plug#load('ultisnips')
@@ -124,9 +132,6 @@ let g:ale_lint_on_filetype_changed = 0
 let g:ale_lint_on_insert_leave     = 0
 let g:ale_lint_on_save             = 0
 let g:ale_lint_on_text_changed     = 'never'
-nmap <Leader>l    <Plug>(ale_lint)
-nmap <Leader>f    <Plug>(ale_fix)
-nmap <Leader><BS> <Plug>(ale_reset_buffer)
 
 " Git indicators
 Plug 'airblade/vim-gitgutter'
@@ -137,11 +142,6 @@ let g:gitgutter_sign_modified           = '▎'
 let g:gitgutter_sign_modified_removed   = '▶'
 let g:gitgutter_sign_removed            = '▶'
 let g:gitgutter_sign_removed_first_line = '◥'
-nmap [g <Plug>GitGutterPrevHunkzz
-nmap ]g <Plug>GitGutterNextHunkzz
-nmap <Leader>p <Plug>GitGutterPreviewHunk
-nmap <Leader>+ <Plug>GitGutterStageHunk
-nmap <Leader>- <Plug>GitGutterUndoHunk]
 
 Plug '907th/vim-auto-save'
 let g:auto_save        = 1
