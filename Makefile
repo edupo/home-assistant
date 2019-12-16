@@ -39,7 +39,7 @@ TMUX_FILES                    := $(HOME)/.tmux.conf
 
 # Vim
 export SNIPS_PARENT_DIR := $(shell pwd)
-VIM_FILES 			    := $(HOME)/.vimrc 
+VIM_FILES 			    := $(HOME)/.vimrc $(HOME)/.vim/ftplugin/help.vim
 VIM_VARS                := SNIPS_PARENT_DIR
 
 # Global
@@ -110,5 +110,6 @@ $(ENVSUBST_FILES): $$@.in Makefile
 	envsubst '$(ENVSUBST_VARS:%=$${%})' <$< >$(notdir $@)
 
 $(CONFIG_FILES): $$(notdir $$@)
+	install -d 700 $(dir $@)
 	install -m 600 $< $@
 
