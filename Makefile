@@ -44,6 +44,7 @@ VIM_VARS                := SNIPS_PARENT_DIR
 
 # Global
 CONFIG_FILES   := $(SHELL_FILES) $(VIM_FILES) $(TMUX_FILES)
+CONFIG_DIRS    := $(sort $(foreach f, $(CONFIG_FILES), $(dir $(f))))
 ENVSUBST_FILES := $(foreach f, $(CONFIG_FILES), $(notdir $(f)))
 ENVSUBST_VARS  := $(SHELL_VARS) $(VIM_VARS)
 CLEAN_FILES    := $(ENVSUBST_FILES)
@@ -59,6 +60,7 @@ config: bash.config git.config tmux.config vim.config
 
 info:
 	@echo "$(gr)Config files:$(no) $(CONFIG_FILES)"
+	@echo "$(gr)Config directories:$(no) $(CONFIG_DIRS)"
 	@echo "$(gr)Envsubst files:$(no) $(ENVSUBST_FILES)"
 
 install: .installed
@@ -109,7 +111,8 @@ $(HOME)/.vim/autoload/plug.vim: .installed
 $(ENVSUBST_FILES): $$@.in Makefile
 	envsubst '$(ENVSUBST_VARS:%=$${%})' <$< >$(notdir $@)
 
-$(CONFIG_FILES): $$(notdir $$@)
-	install -d 700 $(dir $@)
+$(CONFIG_FILES): $$(notdir $$@) | $$(dir $$@)
 	install -m 600 $< $@
 
+$(CONFIG_DIRS):
+	install -d 700 $(dir $@)
