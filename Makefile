@@ -1,6 +1,6 @@
-TARGETS=all bash git tmux vim
+TARGETS=bash git tmux python vim 
 
-.PHONY: $(TARGETS)
+.PHONY: all $(TARGETS)
 
 
 all: $(TARGETS)
