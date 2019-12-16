@@ -7,6 +7,7 @@
 # Color definitions
 ifneq "$(shell which tput)" ""
   ifeq "8" "$(shell tput colors 2>/dev/null)"
+    no = $(shell tput sgr0)
 	rd = $(shell tput setaf 1)
 	gr = $(shell tput setaf 2)
 	ye = $(shell tput setaf 3)
@@ -25,30 +26,46 @@ endef
 ################################################################################
 
 # Bash
-export FILE_SCRIPT_PROMPT     := $(abspath bash/prompt.sh)
-export FILE_SCRIPT_GIT        := $(abspath bash/git.sh)
+export FILE_SCRIPT_PROMPT     := $(abspath prompt.sh)
+export FILE_SCRIPT_GIT        := $(abspath git.sh)
 export FILE_SCRIPT_FILESEARCH := $(abspath file_search.sh) 
-SHELL_FILES                   := .bash_aliases .bashrc
+SHELL_FILES                   := $(HOME)/.bash_aliases $(HOME)/.bashrc
 SHELL_VARS                    := FILE_SCRIPT_PROMPT FILE_SCRIPT_GIT \
                                  FILE_SCRIPT_FILESEARCH
+CLEAN_FILES                   += $(SHELL_FILES)
+
+# Tmux
+TMUX_FILES                    := $(HOME)/.tmux.conf
 
 # Vim
 export SNIPS_PARENT_DIR := $(shell pwd)
-VIM_FILES 			    := .vimrc $(HOME)/.vim/autoload/plug.vim
+VIM_FILES 			    := $(HOME)/.vimrc 
 VIM_VARS                := SNIPS_PARENT_DIR
 
 # Global
-ENVSUBST_FILES := $(SHELL_FILES) $(VIM_FILES)
+CONFIG_FILES   := $(SHELL_FILES) $(VIM_FILES) $(TMUX_FILES)
+ENVSUBST_FILES := $(foreach f, $(CONFIG_FILES), $(notdir $(f)))
 ENVSUBST_VARS  := $(SHELL_VARS) $(VIM_VARS)
+CLEAN_FILES    := $(ENVSUBST_FILES)
 
 ################################################################################
 #                                   TARGETS                                    #
 ################################################################################
 
-.PHONY: config install clean
+.PHONY: config clean
 
 config: bash.config git.config tmux.config vim.config
-	@echo "$(gr)-- Configured all"
+	@echo "$(gr)-- Nothing else to configure.$(no)"
+
+info:
+	@echo "$(gr)Config files:$(no) $(CONFIG_FILES)"
+	@echo "$(gr)Envsubst files:$(no) $(ENVSUBST_FILES)"
+
+install: .installed
+	@echo "$(gr)-- Nothing else to install.$(no)"
+
+clean:
+	rm $(CLEAN_FILES)
 
 .installed: Makefile
 	sudo apt install \
@@ -61,17 +78,12 @@ config: bash.config git.config tmux.config vim.config
 	  pylint autopep8 mccabe pycodestyle \
 	  pydocstyle pyflakes yapf
 	@touch .installed
-	@echo "$(gr)-- Installed requisites"
+	@echo "$(gr)-- Installed requisites$(no)"
 
-clean:
-	rm $(ENVSUBST_FILES)
+bash.config: .installed $(SHELL_FILES)
+	@echo "$(gr)-- Configured shell$(no)"
 
-bash.config: .install $(SHELL_FILES)
-	install -m 600 .bash_aliases $(HOME)
-	install -m 700 .bashrc $(HOME)
-	@echo "$(gr)-- Configured shell"
-
-git.config: .install
+git.config: .installed
 	git config --global core.excludesfile '$(realpath gitignore)'
 	git config --global credential.helper cache
 	git config --global credential.helper 'cache --timeout=3600'
@@ -80,19 +92,23 @@ git.config: .install
 	$(call git.config,user.github,github user)
 	$(call git.config,user.company,company name)
 	$(call git.config,user.baseurl,url of your main git repository)
-	@echo "$(gr)-- Configured git"
+	@echo "$(gr)-- Configured git$(no)"
 
-tmux.config: .install
-	install -m 600 .tmux.conf $(HOME)
-	@echo "$(gr)-- Configured tmux"
+tmux.config: .installed $(TMUX_FILES)
+	@echo "$(gr)-- Configured tmux$(no)"
 
-vim.config: .install $(VIM_FILES)
-	install -m 600 .vimrc $(HOME)
-	@echo "$(gr)-- Configured vim"
+vim.config: .installed $(VIM_FILES) $(HOME)/.vim/autoload/plug.vim
+	@echo "$(gr)-- Configured vim$(no)"
 
-$(HOME)/.vim/autoload/plug.vim: .install
+$(HOME)/.vim/autoload/plug.vim: .installed
 	curl -fLo $@ --create-dirs \
 		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 .SECONDEXPANSION:
+
 $(ENVSUBST_FILES): $$@.in Makefile
+	envsubst '$(ENVSUBST_VARS:%=$${%})' <$< >$(notdir $@)
+
+$(CONFIG_FILES): $$(notdir $$@)
+	install -m 600 $< $@
+
