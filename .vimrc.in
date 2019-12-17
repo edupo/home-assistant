@@ -13,29 +13,36 @@ set textwidth  =80
 
 """"" MAPPINGS
 let mapleader = " "
+let g:BASH_Ctrl_j = 'off'
 
-nnoremap <Leader>j <C-w><C-j> " Pane navigation
-nnoremap <Leader>k <C-w><C-k>
-nnoremap <Leader>l <C-w><C-l>
-nnoremap <Leader>h <C-w><C-h>
+""" Pane navigation
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+"Fix from: https://github.com/neovim/neovim/issues/2048#issuecomment-78534227
+nnoremap <BS> <C-w>h
+
 nnoremap <silent> <Leader>n :NERDTreeToggle<CR> <C-w>=
 nnoremap <silent> <Leader>nf :NERDTreeFind<CR> <C-w>=
-nnoremap <silent> <Leader>p :Files<CR> "Project structure
-nnoremap <silent> <Leader>b :Buffers<CR> "Open Buffers
-nnoremap <silent> <Leader>g :GFiles? "Git files
-nnoremap <silent> <Leader>]  :Tags<CR> "Project's Tags
-nnoremap <silent> <Leader>b] :BTags<CR> "Buffer's Tags
-nnoremap <silent> <Leader>c  :Commits<CR> "Project's Commits
-nnoremap <silent> <Leader>bc :BCommits<CR> "Buffer's Commits
-nnoremap <silent> <Leader>m :FZFMru<CR> "Most recent used files
-nnoremap <Leader>l    <Plug>(ale_lint)
-nnoremap <Leader>f    <Plug>(ale_fix)
-nnoremap <Leader><BS> <Plug>(ale_reset_buffer)
-nnoremap [g <Plug>GitGutterPrevHunkzz
-nnoremap ]g <Plug>GitGutterNextHunkzz
-nnoremap <Leader>p <Plug>GitGutterPreviewHunk
-nnoremap <Leader>+ <Plug>GitGutterStageHunk
-nnoremap <Leader>- <Plug>GitGutterUndoHunk]
+
+nnoremap <silent> <Leader>p :Files<CR>
+nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>g :GFiles?
+nnoremap <silent> <Leader>]  :Tags<CR>
+nnoremap <silent> <Leader>b] :BTags<CR>
+nnoremap <silent> <Leader>c  :Commits<CR>
+nnoremap <silent> <Leader>bc :BCommits<CR>
+nnoremap <silent> <Leader>m :FZFMru<CR>
+
+nmap <Leader>l <Plug>(ale_lint)
+nmap <Leader>f <Plug>(ale_fix)
+nmap <Leader><BS> <Plug>(ale_reset_buffer)
+
+nmap [g <Plug>(GitGutterPrevHunk)
+nmap ]g <Plug>(GitGutterNextHunk)
+nmap <Leader>p <Plug>(GitGutterPreviewHunk)
+nmap <Leader>+ <Plug>(GitGutterStageHunk)
+nmap <Leader>- <Plug>(GitGutterUndoHunk)
 inoremap <silent> <C-j> <C-r>=LoadUltiSnipsAndExpand()<CR>
 inoremap (     ()<Esc>i
 inoremap {     {}<Esc>i
@@ -110,23 +117,23 @@ Plug 'sheerun/vim-polyglot'
 " Linting and fixing tools
 Plug 'w0rp/ale'
 let g:ale_fixers = {
-      \  'css':        ['prettier'],
-      \  'javascript': ['prettier-standard'],
-      \  'json':       ['prettier'],
-      \  'ruby':       ['standardrb'],
-      \  'scss':       ['prettier'],
-      \  'yml':        ['prettier'],
-      \  'python':     ['pylint'],
-      \}
+       \  'css':        ['prettier'],
+       \  'javascript': ['prettier-standard'],
+       \  'json':       ['prettier'],
+       \  'ruby':       ['standardrb'],
+       \  'scss':       ['prettier'],
+       \  'yml':        ['prettier'],
+       \  'python':     ['autopep8'],
+       \}
 let g:ale_linters = {
-      \  'css':        ['csslint'],
-      \  'javascript': ['standard'],
-      \  'json':       ['jsonlint'],
-      \  'ruby':       ['standardrb'],
-      \  'scss':       ['sasslint'],
-      \  'yaml':       ['yamllint'],
-      \  'python':     ['pylint'],
-      \}
+       \  'css':        ['csslint'],
+       \  'javascript': ['standard'],
+       \  'json':       ['jsonlint'],
+       \  'ruby':       ['standardrb'],
+       \  'scss':       ['sasslint'],
+       \  'yaml':       ['yamllint'],
+       \  'python':     ['pylint'],
+       \}
 let g:ale_lint_on_enter            = 0
 let g:ale_lint_on_filetype_changed = 0
 let g:ale_lint_on_insert_leave     = 0

@@ -75,10 +75,11 @@ clean:
 	  git \
 	  python3 python3-pip \
 	  tmux xclip \
-	  vim curl
+	  vim curl \
+	  shellcheck
 	sudo pip3 install \
 	  pylint autopep8 mccabe pycodestyle \
-	  pydocstyle pyflakes yapf
+	  pydocstyle pyflakes yapf rope
 	@touch .installed
 	@echo "$(gr)-- Installed requisites$(no)"
 
