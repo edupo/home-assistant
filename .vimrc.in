@@ -34,6 +34,7 @@ nnoremap <silent> <Leader>c  :Commits<CR>
 nnoremap <silent> <Leader>bc :BCommits<CR>
 nnoremap <silent> <Leader>m :FZFMru<CR>
 
+"Note: Do not use nnoremap when using <Plug>!
 nmap <Leader>l <Plug>(ale_lint)
 nmap <Leader>f <Plug>(ale_fix)
 nmap <Leader><BS> <Plug>(ale_reset_buffer)
@@ -43,7 +44,9 @@ nmap ]g <Plug>(GitGutterNextHunk)
 nmap <Leader>p <Plug>(GitGutterPreviewHunk)
 nmap <Leader>+ <Plug>(GitGutterStageHunk)
 nmap <Leader>- <Plug>(GitGutterUndoHunk)
-inoremap <silent> <C-j> <C-r>=LoadUltiSnipsAndExpand()<CR>
+
+" inoremap <silent> <C-j> <C-r>=LoadUltiSnipsAndExpand()<CR>
+
 inoremap (     ()<Esc>i
 inoremap {     {}<Esc>i
 inoremap [     []<Esc>i
@@ -96,15 +99,16 @@ autocmd FileType vim let b:vcm_tab_complete = 'vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 let g:UltiSnipsExpandTrigger       = "<C-j>"
+let g:UltiSnipsListSnippets        = "<C-k>"
 let g:UltiSnipsJumpForwardTrigger  = "<C-j>"
 let g:UltiSnipsJumpBackwardTrigger = "<C-k>"
-function! LoadUltiSnipsAndExpand()
-    let l:curpos = getcurpos()
-    execute plug#load('ultisnips')
-    call cursor(l:curpos[1], l:curpos[2])
-    call UltiSnips#ExpandSnippet()
-    return ""
-endfunction
+" function! LoadUltiSnipsAndExpand()
+"     let l:curpos = getcurpos()
+"     execute plug#load('ultisnips')
+"     call cursor(l:curpos[1], l:curpos[2])
+"     call UltiSnips#ExpandSnippet()
+"     return ""
+" endfunction
 
 " Indentation help
 Plug 'Yggdroot/indentLine'
