@@ -39,8 +39,9 @@ TMUX_FILES                    := $(HOME)/.tmux.conf
 
 # Vim
 export SNIPS_PARENT_DIR := $(shell pwd)
+export FILE_THESAURUS   := $(shell pwd)/thesaurus.txt
 VIM_FILES 			    := $(HOME)/.vimrc $(HOME)/.vim/ftplugin/help.vim
-VIM_VARS                := SNIPS_PARENT_DIR
+VIM_VARS                := SNIPS_PARENT_DIR FILE_THESAURUS
 
 # Global
 CONFIG_FILES   := $(SHELL_FILES) $(VIM_FILES) $(TMUX_FILES)

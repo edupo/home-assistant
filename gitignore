@@ -23,6 +23,7 @@ coverage.xml
 results.xml
 clover.xml
 htmlcov
+tags
 
 # Chef
 Berksfile.lock

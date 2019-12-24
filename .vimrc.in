@@ -1,15 +1,30 @@
-" Default settings
-syntax on
-set number
-set nocompatible
-set expandtab
-set encoding   =utf-8
-set clipboard  =unnamed
-set backspace  =indent,eol,start
-set tabstop    =4
-set shiftwidth =2
-set textwidth  =80
 
+set nocompatible              " Disable VI compatibility
+syntax enable                 " Syntax highlight
+set number                    " Show line number
+set encoding=utf-8 " Default file encoding
+set clipboard=unnamed " Yank to the selection directly
+set backspace=indent,eol,start " Backspace options
+set textwidth=80 " Maximum line width
+filetype plugin on            " File explorer
+set path+=**                  " Include CWD for file searches
+set wildmenu                  " Tab completion is shown on top of the command line
+set foldmethod=indent         " Fold by indent
+set foldnestmax=10            " Deepest fold level
+set nofoldenable              " Do not fold by default
+set foldlevel=2               " Default fold level
+set expandtab                 " Indent with spaces by default
+set tabstop=2                 " Number of spaces of a tab
+set shiftwidth=2              " Number of spaces of indent
+" Thesaurus file
+set thesaurus=${FILE_THESAURUS}
+command! MakeTags !ctags -R . " Help command to create tags file
+
+let g:netrw_banner=0
+let g:netrw_browse_split=4
+let g:netrw_altv=1
+let g:netrw_liststyle=3
+let g:netrw_list_hide=netrw_gitignore#Hide()
 
 """"" MAPPINGS
 let mapleader = " "
@@ -25,15 +40,6 @@ nnoremap <BS> <C-w>h
 nnoremap <silent> <Leader>n :NERDTreeToggle<CR> <C-w>=
 nnoremap <silent> <Leader>nf :NERDTreeFind<CR> <C-w>=
 
-nnoremap <silent> <Leader>p :Files<CR>
-nnoremap <silent> <Leader>b :Buffers<CR>
-nnoremap <silent> <Leader>g :GFiles?
-nnoremap <silent> <Leader>]  :Tags<CR>
-nnoremap <silent> <Leader>b] :BTags<CR>
-nnoremap <silent> <Leader>c  :Commits<CR>
-nnoremap <silent> <Leader>bc :BCommits<CR>
-nnoremap <silent> <Leader>m :FZFMru<CR>
-
 "Note: Do not use nnoremap when using <Plug>!
 nmap <Leader>l <Plug>(ale_lint)
 nmap <Leader>f <Plug>(ale_fix)
@@ -46,11 +52,6 @@ nmap <Leader>+ <Plug>(GitGutterStageHunk)
 nmap <Leader>- <Plug>(GitGutterUndoHunk)
 
 " inoremap <silent> <C-j> <C-r>=LoadUltiSnipsAndExpand()<CR>
-
-inoremap (     ()<Esc>i
-inoremap {     {}<Esc>i
-inoremap [     []<Esc>i
-
 
 """"" PLUGINS
 call plug#begin('~/.vim/plugged')
@@ -66,49 +67,6 @@ let g:lion_squeeze_spaces = 1
 " Additional text objects
 Plug 'wellle/targets.vim'
 Plug 'michaeljsmith/vim-indent-object'
-
-" Use 'f' and 't' to move between matches
-Plug 'rhysd/clever-f.vim'
-let g:clever_f_across_no_line    = 1
-let g:clever_f_fix_key_direction = 1
-let g:clever_f_timeout_ms        = 3000
-
-" File fuzzy finder
-Plug 'tpope/vim-fugitive'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --no-bash' }
-Plug 'junegunn/fzf.vim'
-Plug 'pbogut/fzf-mru.vim'
-let g:fzf_commits_log_options = '--graph --color=always
-  \ --format="%C(yellow)%h%C(red)%d%C(reset)
-  \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
-" Next maps allows to find files in different dimensions and open them for edit.
-
-" Auto completion
-Plug 'natebosch/vim-lsc'
-Plug 'ajh17/VimCompletesMe'
-let g:lsc_auto_map             = v:true
-let g:lsc_enable_autocomplete  = v:true
-let g:lsc_enable_diagnostics   = v:false
-let g:lsc_reference_highlights = v:false
-let g:lsc_trace_level          = 'off'
-let g:lsc_server_commands      = { 'python' : 'pyls'}
-autocmd FileType vim let b:vcm_tab_complete = 'vim'
-"autocmd FileType python let b:vcm_tab_complete = "omni"
-
-" Snippets
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-let g:UltiSnipsExpandTrigger       = "<C-j>"
-let g:UltiSnipsListSnippets        = "<C-k>"
-let g:UltiSnipsJumpForwardTrigger  = "<C-j>"
-let g:UltiSnipsJumpBackwardTrigger = "<C-k>"
-" function! LoadUltiSnipsAndExpand()
-"     let l:curpos = getcurpos()
-"     execute plug#load('ultisnips')
-"     call cursor(l:curpos[1], l:curpos[2])
-"     call UltiSnips#ExpandSnippet()
-"     return ""
-" endfunction
 
 " Indentation help
 Plug 'Yggdroot/indentLine'
