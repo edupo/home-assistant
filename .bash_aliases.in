@@ -1,94 +1,34 @@
-. ${FILE_SCRIPT_FILESEARCH} 
-. ${FILE_SCRIPT_GIT}
-
-# Super-lazy aliases #
-######################
-
-# git
-alias s="git status"
+alias ....="cd ../../.."
+alias ...="cd ../.."
+alias ..="cd .."
+alias aa="git add -A"
+alias amend="git commit --amend --no-edit"
+alias ap="git add -u; git commit --amend --no-edit; git push -f"
+alias au="git add -u"
+alias bclean="git branch --merged master | grep -v master | xargs -n 1 git branch -d"
+alias binfo="git branch -vv"
 alias c="git commit -m"
 alias ca="git commit -a -m"
-alias amend="git commit --amend --no-edit"
-alias aa="git add -A"
-alias au="git add -u"
-alias ap="git add -u; git commit --amend --no-edit; git push -f"
-alias push="git push"
-alias pus="git push"
-alias pull="git pull"
-alias pul="git pull"
+alias cd-="cd -"
+alias cd....="cd ../../.."
+alias cd...="cd ../.."
+alias cd..="cd .."
 alias checkout="git checkout"
-alias re="git reset"
-alias reset="git reset"
 alias d="git diff"
 alias diff="git diff"
-alias me="git merge"
-alias merge="git merge"
-alias stash="git stash"
-alias stas="git stash"
-alias binfo="git branch -vv"
-alias bclean="git branch --merged master | grep -v master | xargs -n 1 git branch -d"
-alias subm="git submodule update --init --recursive"
-
-# kitchen
-alias kv="kitchen verify"
-alias kd="kitchen destroy"
-alias kc="kitchen converge"
-alias kr="kitchen destroy;kitchen converge"
-
-# bash 
-alias reload="source ~/.bashrc"
 alias exit="tmux detach && exit"
-
-# path
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-
-alias cd..="cd .."
-alias cd...="cd ../.."
-alias cd....="cd ../../.."
-
-alias cd-="cd -"
-
-# grep
-alias usages=list_occurrences
-alias count=count_occurrences
-alias replace=replace_text
-
-# ls
-alias ll='ls -alF'
-alias la='ls -A'
 alias l='ls -CF'
-
-# apt-get
-alias install="sudo apt-get install"
- 
-# stylish
-alias style="astyle --style=allman --indent=force-tab --indent-cases --break-blocks --pad-oper --pad-header -k1 -W1 -j -O"
-alias pre="style *.cpp *.h"
-
-# python
-alias py="python"
-
-# openssl
-getcert(){
-  if [ -z "$1" ]; then
-    echo -e "usage:\n\n\tgetcert <HOST> [PORT]\n"
-  else 
-    local PORT=${2:-443}
-    openssl s_client -connect $1:$PORT -showcerts
-  fi
-}
-
-# system
-
+alias la='ls -A'
+alias ll='ls -alF'
+alias merge="git merge"
 alias ports="netstat -tulpn"
+alias pull="git pull"
+alias push="git push"
+alias py="python3"
+alias reload="source ~/.bashrc"
+alias reset="git reset"
+alias s="git status"
 alias shred="shred -vzun 10"
 alias shredir="find . -type f -exec shred -vzun 10 {} \;"
-
-# ssh
-ssh_clean(){
-  ssh-keygen -f "$HOME/.ssh/known_hosts" -R $1
-  ssh $1
-}
-alias sshc="ssh_clean"
+alias stash="git stash"
+alias subm="git submodule update --init --recursive"

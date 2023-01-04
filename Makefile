@@ -28,20 +28,17 @@ endef
 # Bash
 export FILE_SCRIPT_PROMPT     := $(abspath bash/prompt.sh)
 export FILE_SCRIPT_GIT        := $(abspath bash/git.sh)
-export FILE_SCRIPT_FILESEARCH := $(abspath bash/file_search.sh) 
 SHELL_FILES                   := $(HOME)/.bash_aliases $(HOME)/.bashrc
-SHELL_VARS                    := FILE_SCRIPT_PROMPT FILE_SCRIPT_GIT \
-                                 FILE_SCRIPT_FILESEARCH
+SHELL_VARS                    := FILE_SCRIPT_PROMPT FILE_SCRIPT_GIT
 CLEAN_FILES                   += $(SHELL_FILES)
 
 # Tmux
 TMUX_FILES                    := $(HOME)/.tmux.conf
 
 # Vim
-export SNIPS_PARENT_DIR := $(shell pwd)
 export FILE_THESAURUS   := $(shell pwd)/thesaurus.txt
-VIM_FILES 			    := $(HOME)/.vimrc $(HOME)/.vim/ftplugin/help.vim
-VIM_VARS                := SNIPS_PARENT_DIR FILE_THESAURUS
+
+VIM_VARS                := FILE_THESAURUS
 
 # Global
 CONFIG_FILES   := $(SHELL_FILES) $(VIM_FILES) $(TMUX_FILES)
@@ -71,16 +68,7 @@ clean:
 	rm $(CLEAN_FILES)
 
 .installed: Makefile
-	sudo apt install \
-	  gettext \
-	  git \
-	  python3 python3-pip \
-	  tmux xclip \
-	  vim curl \
-	  shellcheck
-	sudo pip3 install \
-	  pylint autopep8 mccabe pycodestyle \
-	  pydocstyle pyflakes yapf rope
+	# pip3 install pytest black
 	@touch .installed
 	@echo "$(gr)-- Installed requisites$(no)"
 
@@ -91,22 +79,20 @@ git.config: .installed
 	git config --global core.excludesfile '$(realpath gitignore)'
 	git config --global credential.helper cache
 	git config --global credential.helper 'cache --timeout=3600'
+	git config --global push.default simple
+	git config --global credential.helper store
 	$(call git.config,user.name,complete user name)
 	$(call git.config,user.email,user email)
-	$(call git.config,user.github,github user)
 	$(call git.config,user.company,company name)
+	$(call git.config,user.github,github user)
 	$(call git.config,user.baseurl,url of your main git repository)
 	@echo "$(gr)-- Configured git$(no)"
 
 tmux.config: .installed $(TMUX_FILES)
 	@echo "$(gr)-- Configured tmux$(no)"
 
-vim.config: .installed $(VIM_FILES) $(HOME)/.vim/autoload/plug.vim
+vim.config: .installed $(VIM_FILES)
 	@echo "$(gr)-- Configured vim$(no)"
-
-$(HOME)/.vim/autoload/plug.vim: .installed
-	curl -fLo $@ --create-dirs \
-		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 .SECONDEXPANSION:
 

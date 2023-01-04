@@ -1,6 +1,6 @@
 # Checks out the first branch that contains the passed string in the name
 co() {
-  
+
   # Check arguments
   if [ -z $1 ]; then
     echo -e "-- ERROR: No branch expression provided!" \
@@ -21,7 +21,7 @@ co() {
   fi
 
   # Finally the checkout
-  echo "-- Found branch: '$BRANCH'" 
+  echo "-- Found branch: '$BRANCH'"
   git checkout $BRANCH
 
 }
@@ -32,8 +32,7 @@ export WORKSPACE=${WORKSPACE:-$HOME}
 # folder under you home.
 _find_dest(){
 
-  # Default clone destination is HOME but you can specify a subfolder if you
-  # want.
+  # Default clone destination is $HOME/ws but you can specify anything you like.
   local DEST=$HOME/ws
   if [ -n "$1" ]; then
     local DEST=$HOME/$1
@@ -58,7 +57,9 @@ clono(){
 
 # Check if 'user.baseurl' is defined and clones from that host. If not proceed
 # with github.
-clon(){
+# Repos are cloned in `~/ws` and if your repo is `shared/group/my_project` it will
+# be cloned to `~/ws/shared_group_my_project` to avoid complex trees.
+clone(){
 
   # Checking for the repository argument
   if [ -z "$1" ]; then
@@ -66,7 +67,7 @@ clon(){
       "\n\n\tusage: $1 <repository> [workspace]" \
       "\n\nIf 'user.baseurl' is defined in 'git.config' then $0 will try to " \
       " clone from that host else github will be used."
-    return 
+    return
   fi
 
   local HOST=$(git config --get user.baseurl)
@@ -79,6 +80,7 @@ clon(){
 
   # Actual clone from defined host.
   local DEST=$(_find_dest $2)
-  git -C $DEST clone --recursive $HOST/$1.git
+  local PROJ=$(echo $1 | tr "/" "_")
+  git clone --recursive $HOST/$1.git $DEST/$PROJ
 
 }
