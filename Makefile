@@ -81,6 +81,7 @@ git.config: .installed
 	git config --global credential.helper 'cache --timeout=3600'
 	git config --global push.default simple
 	git config --global credential.helper store
+	git config --global push.autoSetupRemote true
 	$(call git.config,user.name,complete user name)
 	$(call git.config,user.email,user email)
 	$(call git.config,user.company,company name)
