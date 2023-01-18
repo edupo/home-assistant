@@ -53,7 +53,7 @@ CLEAN_FILES    := $(ENVSUBST_FILES)
 
 .PHONY: config clean
 
-config: bash.config git.config tmux.config vim.config
+config: bash.config git.config vim.config
 	@echo "$(gr)-- Nothing else to configure.$(no)"
 
 info:

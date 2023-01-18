@@ -14,14 +14,14 @@ export MANWIDTH=90
 
 if [[ -f "${HOME}/.bash_aliases" ]]
 then
-	source "${FILE_SCRIPT_GIT}"
+	source "/home/vagrant/ws/home-assistant/bash/git.sh"
 	source "${HOME}/.bash_aliases"
 fi
 
 
-if [[ -f "${FILE_SCRIPT_PROMPT}" ]]
+if [[ -f "/home/vagrant/ws/home-assistant/bash/prompt.sh" ]]
 then
-    source "${FILE_SCRIPT_PROMPT}"
+    source "/home/vagrant/ws/home-assistant/bash/prompt.sh"
 else
 	H=$(hostname)
 	# Pick your favorite PS1
