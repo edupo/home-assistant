@@ -81,6 +81,6 @@ clone(){
   # Actual clone from defined host.
   local DEST=$(_find_dest $2)
   local PROJ=$(echo $1 | tr "/" "_")
-  git clone --recursive $HOST/$1.git $DEST/$PROJ
+  git clone --recursive $HOST$1.git $DEST/$PROJ
 
 }
