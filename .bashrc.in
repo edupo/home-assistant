@@ -1,7 +1,7 @@
 ! tty -s && return  # Guard against non interactive shells.
 
-stty erase ^H intr ^C kill ^U start ^Q stop ^S susp ^Z eof ^D
-set -o emacs
+#stty erase ^H intr ^C kill ^U start ^Q stop ^S susp ^Z eof ^D
+#set -o emacs
 umask 027
 
 export EDITOR=vim
@@ -10,7 +10,8 @@ export FCEDIT=${EDITOR}
 export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls' # Ignore the ls command as well
 export MANWIDTH=90
-
+export GEM_HOME="$HOME/gems"
+export PATH="$HOME/gems/bin:$PATH"
 
 if [[ -f "${HOME}/.bash_aliases" ]]
 then
@@ -36,4 +37,9 @@ fi
 if [[ -f "${HOME}/ws/.venv/bin/activate" ]]
 then
 	source "${HOME}/ws/.venv/bin/activate"
+fi
+
+if [[ -f "/etc/bash_completion" ]]
+then
+	source "/etc/bash_completion"
 fi
