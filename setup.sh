@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright (c) <year> <copyright holders>
+# Copyright (c) 2024 Eduardo Lezcano Alvarez
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -54,7 +54,7 @@ skip() {
     msg "${Y}S" "${1}" "${2}" 
 }
 
-info "version" "2024.0.0"
+info "version" "2024.0.2"
 
 ################################################################################
 # bash 
